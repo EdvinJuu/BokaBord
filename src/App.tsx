@@ -8,7 +8,8 @@ function App() {
     <>
     <p>{reformulateDate("getHours")}</p>
     <p>{reformulateDate("getSeconds")}</p>
-    <RestaurantCard />
+    <RestaurantCard name="ASD" address="Testvägen 13, Stockholm" />
+    <RestaurantCard name="ASD" address="HAHAHA 32, Stockholm" descriptions={["Barhäng", "Elegant", "Mysigt"]}/>
     </>
   )
 }
