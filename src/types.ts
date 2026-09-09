@@ -14,7 +14,7 @@ export interface ReservationProps{
 
 export interface UserProps{
     name: string;
-    phoneNumber: number; // Kan göra om till object med country code + number
+    phoneNumber: string; // Kan göra om till object med country code + number
     email: string;
 }
 
