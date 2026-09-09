@@ -28,3 +28,34 @@ export function RestaurantCard({
     </div>
   );
 }
+
+
+/*Det här är bara något jag testar//Rebecca
+
+function RestaurantList({ restaurants }: RestaurantListProps) {
+    return (
+        <div>
+            {restaurants.map((restaurant) => (
+                <RestaurantCard
+                    key={restaurant.id}
+                    name={restaurant.name}
+                    address={restaurant.address}
+                    descriptions={restaurant.descriptions}
+                />
+            ))}
+        </div>
+    );
+}
+
+const restaurants: RestaurantProps[] = [
+    {
+        id: 1,
+        name: "Abc",
+        address: "någonstans 1",
+        menu: "blaha",
+        descriptions: ["lalala", "tralalala", "tralalala"]
+    }
+];
+
+<RestaurantList restaurants={restaurants} />
+*/
