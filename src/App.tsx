@@ -8,7 +8,7 @@ function App() {
     <>
     <p>{reformulateDate("getHours")}</p>
     <p>{reformulateDate("getSeconds")}</p>
-    <TestComponent />
+    <RestaurantCard />
     </>
   )
 }

@@ -1,6 +1,16 @@
-
 export function RestaurantCard() {
-
-    return (<div><p>ADD NAME HERE</p>
-    <p>ADD DATE HERE AND CONVERT TO STRING</p></div>)
+  return (
+    <div>
+      <h2>Test Restaunt</h2>
+      <li>
+        <ul><p>Barhäng</p></ul>
+        <ul><p>Elegant</p></ul>
+        <ul><p>Mysigt</p></ul>
+      </li>
+      <div>
+        <img src="" alt="Pin Icon" />
+        <p>Testvägen 13, Stockholm</p>
+      </div>
+    </div>
+  );
 }
