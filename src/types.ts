@@ -4,7 +4,7 @@ export interface RestaurantProps{
     name: string;
     address: string;
     menu: string;
-    cuisine: string;
+    descriptions: string[]; // ["svensk mat", "familiärt", "bar"] Badge.tsx 
 }
 
 export interface ReservationProps{
