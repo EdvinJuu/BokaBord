@@ -1,10 +1,10 @@
 export function NavBarMagnus() {
     return(
-        <div class="topnav">
+        <div className="topnav">
   <a href="#home">Home</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
-  <input type="text" placeholder="Search..">
+  <input type="text" placeholder="Search.." />
 </div>
     );
 }

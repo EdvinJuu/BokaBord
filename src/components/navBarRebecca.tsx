@@ -1,3 +1,5 @@
+import { SearchBar } from "./Searchbar";
+
 export function NavBar () {
     return (
         <div>
@@ -12,12 +14,7 @@ export function NavBar () {
     );
 };
 
-function SearchBar () {
-    return (
-        <input type="text" placeholder ="Sök restaurang, beskrivning etc..."/>
-    );
-    
-};
+
 
 function UserAccount () {
     return (
