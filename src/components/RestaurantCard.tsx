@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface RestaurantProps{
     id: number;
     name: string;
@@ -13,16 +15,15 @@ thing == false ? kör den här funktionen : console.log() */
 
 export function RestaurantCard({name, address, descriptions}: RestaurantProps) {
   
-  /*   if (!descriptions) return; */
+    if (!descriptions) return null
 
     return (
     <div>
       <h2>{name}</h2>
       <ul>
-        {/* {descriptions.map((description) => {
+        {descriptions.map((description) => (
         <li><p>{description}</p></li>
-      })} */}
-      {descriptions}
+      ))}
       </ul>
       <div>
         <img src="" alt="Pin Icon" />

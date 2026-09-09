@@ -1,4 +1,6 @@
 import { RestaurantCard } from "./components/RestaurantCard"
+import { RestaurantCardÖmer } from "./components/RestaurantCardÖmer"
+import { NavBarMagnus } from ".components/NavBarMagnus"
 import TestComponent from "./components/test"
 import {reformulateDate} from "./utilities/dateFormatter"
 
@@ -8,8 +10,9 @@ function App() {
     <>
     <p>{reformulateDate("getHours")}</p>
     <p>{reformulateDate("getSeconds")}</p>
-    <RestaurantCard name="ASD" address="Testvägen 13, Stockholm" />
-    <RestaurantCard name="ASD" address="HAHAHA 32, Stockholm" descriptions={["Barhäng", "Elegant", "Mysigt"]}/>
+    <RestaurantCard />
+    <RestaurantCardÖmer />
+    <NavBarMagnus />
     </>
   )
 }
