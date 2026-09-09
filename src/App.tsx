@@ -1,3 +1,5 @@
+import { RestaurantCard } from "./components/RestaurantCard"
+import TestComponent from "./components/test"
 import {reformulateDate} from "./utilities/dateFormatter"
 
 function App() {
@@ -6,6 +8,7 @@ function App() {
     <>
     <p>{reformulateDate("getHours")}</p>
     <p>{reformulateDate("getSeconds")}</p>
+    <TestComponent />
     </>
   )
 }
