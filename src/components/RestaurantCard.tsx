@@ -12,20 +12,20 @@ export function RestaurantCard({
   if (!descriptions) return null;
 
   return (
-    <div>
+    <li>
       <h2>{name}</h2>
-      <ul>
+      <div>
         {descriptions.map((description) => (
-          <li>
+          <div>
             <p>{description}</p>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       <div>
         <img src="" alt="Pin Icon" />
         <p>{address}</p>
       </div>
-    </div>
+    </li>
   );
 }
 
