@@ -4,7 +4,7 @@ function BookingForm() {
   const [partySize, setPartySize] = useState("2");
   const today = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState(today);
-  const [time, setTime] = useState("18:00");
+  const [time, setTime] = useState("14:00");
 
   function handleOnSubmit(e) {
     e.preventDefault();
@@ -31,12 +31,6 @@ function BookingForm() {
         ></input>
         <button type="submit">Skicka bokningsförfrågan</button>
       </form>
-
-      <p>
-        {date} 
-        {time}
-        {partySize}
-      </p>
     </>
   );
 }
