@@ -1,23 +1,29 @@
 import { useState } from "react";
+import { reformulateDatetoString } from "../utilities/dateFormatter";
 
 function BookingForm() {
+  const currentTime = new Date();
+  const { currentHour, currentMinutes } = reformulateDatetoString(
+    new Date(1995, 11, 17, 3, 2, 0),
+  );
   const [partySize, setPartySize] = useState("2");
-  const today = new Date().toISOString().slice(0, 10);
-  const [date, setDate] = useState(today);
-  const [time, setTime] = useState("18:00");
+  const [date, setDate] = useState(currentTime.toISOString().slice(0, 10));
+  const [time, setTime] = useState(`${currentHour}:${currentMinutes}`);
 
-  function handleOnSubmit(e) {
+  /*   function handleOnSubmit(e) {
     e.preventDefault();
-    console.log("Hej");
-  }
+    console.log("Hej"); 
+  } */
 
   return (
     <>
-      <form onSubmit={handleOnSubmit}>
+      <form /* onSubmit={handleOnSubmit} */>
         <input
           type="date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={(e) => {
+            date > currentTime && setDate(e.target.value);
+          }}
         ></input>
         <input
           type="time"
@@ -33,10 +39,11 @@ function BookingForm() {
       </form>
 
       <p>
-        {date} 
-        {time}
+        {date}
+
         {partySize}
       </p>
+      <p>{time}</p>
     </>
   );
 }
