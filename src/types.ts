@@ -5,6 +5,8 @@ export interface RestaurantProps{
     address: string;
     menu: string;
     descriptions: string[]; // ["svensk mat", "familiärt", "bar"] Badge.tsx 
+    openTime: number[]; // Specifiera att endast två nummer får vara i listan
+    totalTables: number;
 }
 
 export interface ReservationProps{
@@ -17,15 +19,5 @@ export interface UserProps{
     phoneNumber: string; // Kan göra om till object med country code + number
     email: string;
 }
-
-
-
-
-
-/* export interface AdminReservationProps{
-    restaurant: RestaurantProps
-    guest: UserProps;
-    reservation: ReservationProps;
-} */
 
 
