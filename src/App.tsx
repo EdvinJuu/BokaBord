@@ -1,6 +1,6 @@
 import { Navbar } from "./components/Navbar";
 import RestaurantList from "./components/RestaurantList";
-import BookingForm from "./components/BookingForm";
+import BookingForm from "./components/BookingForm_Magnus";
 
 function App() {
 
