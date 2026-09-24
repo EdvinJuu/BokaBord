@@ -1,153 +1,106 @@
 import { useState } from "react";
-import { reformulateDate } from "../utilities/dateFormatter";
+
+const availableTimes = [
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "17:00",
+  "17:30",
+  "18:00",
+  "18:30",
+  "19:00",
+  "19:30",
+  "20:00",
+  "20:30",
+];
+
+const availablePartySizes = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
+function getAvailableDates(daysAhead: number) {
+  const dates: string[] = [];
+  const start = new Date();
+
+  for (let i = 0; i < daysAhead; i++) {
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    dates.push(`${year}-${month}-${day}`);
+  }
+
+  return dates;
+}
 
 function BookingForm() {
-  
-  const [showPartySizeError, setShowPartySizeError] = useState(false);
-  const [showDateError, setShowDateError] = useState(false);
-  const [showTimeError, setShowTimeError] = useState(false);
+  const availableDates = getAvailableDates(14);
 
-  const [showSubmitApproved, setShowSubmitApproved] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const [bookingTime, setBookingTime] = useState(new Date()); // vi kommer kanske att behöva använda oss av att den börjar som "null" för att stoppa bokningserrors
+  const [date, setDate] = useState(availableDates[0]);
+  const [time, setTime] = useState("18:00");
   const [partySize, setPartySize] = useState("2");
+  const [submitted, setSubmitted] = useState(false);
 
-  function handleOnSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  const isValid =
+    availableDates.includes(date) &&
+    availableTimes.includes(time) &&
+    availablePartySizes.includes(partySize);
+
+  function handleChange(setter: (value: string) => void) {
+    return (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSubmitted(false);
+      setter(e.target.value);
+    };
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setShowSubmitApproved(false);
-    setIsSubmitted(true);
-
-    if (Number(partySize) >= 1 && showDateError !== true /* && time !== "" */) { // HAR INTE UPPDATERAT ÄN, MÅSTE KOLLAS ÖVER
-      setShowSubmitApproved(true);
-    }
-  }
-
-  function takeAwaySubmitErrors() {
-    setShowSubmitApproved(false);
-  }
-
-  function handleDateOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    //återställ alla useStates
-    takeAwaySubmitErrors();
-    setIsSubmitted(false);
-    setShowDateError(false);
-
-    // skapa Date objekt för tiden just nu
-    const currentDate = new Date();
-    // skapa Date objekt för tiden vi kommer ändra till så vi inte skriver över datan i originella variabeln
-    const bookingDate = bookingTime;
-
-    //splitta up datum Stringen till 3 olika strings i en lista: [år, månad, datum]
-    const dateSplit = e.target.value.split("-");
-
-    // sätt date till datumen från inputet(och konvertera från string till nummer)
-    bookingDate.setFullYear(Number(dateSplit[0]));
-    bookingDate.setMonth(Number(dateSplit[1])); // setMonth ÄR INDEX 0-11 (Jan = 0), behöver konvertera från 1-12 range
-    bookingDate.setDate(Number(dateSplit[2]));
-
-    // jämför tiden just nu med tiden vi vill ändra till
-    if (currentDate <= bookingDate) {
-      console.log(`Datum är korrekt ${currentDate} > ${bookingDate}`); // tillfällig log för bugfixing, kan vara bra sätt att kolla sin kod
-
-      // om datum är lika eller senare setBookingTime till datumet och return ut från funktionen
-      return setBookingTime(bookingDate);
-    }
-    console.log(`Datum är inte korrekt, återvänder: ${currentDate} < ${bookingDate}`); // tillfällig log för bugfixing
-    // om inte korrekt sätt error till true istället
-    setShowDateError(true);
-  }
-
-  function handleTimeOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    takeAwaySubmitErrors();
-    setIsSubmitted(false);
-    setShowDateError(false);
-
-    if (e.target.value === "") return // om time input är TOMT så avsluta funktionen tidigt
-
-    // skapa Date objekt för tiden just nu
-    const currentDate = new Date();
-    // skapa Date objekt för tiden vi kommer ändra till så vi inte skriver över datan i originella variabeln
-    const bookingDate = bookingTime;
-
-    //splitta up time Stringen till 2 olika strings i en lista: [timmar, minuter]
-    const dateSplit = e.target.value.split(":");
-
-    // sätt date till datumen från inputet(och konvertera från string till nummer)
-    bookingDate.setHours(Number(dateSplit[0]));
-    bookingDate.setMinutes(Number(dateSplit[1]));
-
-    // jämför tiden just nu med tiden vi vill ändra till
-    if (currentDate <= bookingDate) {
-
-      console.log(`Datum är korrekt ${currentDate} > ${bookingDate}`); // tillfällig log för bugfixing
-
-      // om datum är lika eller senare setBookingTime till datumet och return ut från funktionen
-      return setBookingTime(bookingDate);
-    }
-
-    console.log(`Datum är inte korrekt, återvänder: ${currentDate} < ${bookingDate}`); // tillfällig log för bugfixing
-
-    // om inte korrekt sätt error till true istället
-    setShowDateError(true);
+    setSubmitted(true);
   }
 
   return (
-    <>
-      <form onSubmit={handleOnSubmit}>
-        <input
-          type="date" // GONNA NEED TYPE VALIDATION
-          value={reformulateDate(bookingTime, "getDate")} // Kör våran bokningstid genom våran reformulateDate funktion så vi ger våran <input> rätt value
-          onChange={(e) => {
-            handleDateOnChange(e);
-          }}
-        ></input>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Datum
+        <select value={date} onChange={handleChange(setDate)}>
+          {availableDates.map((availableDate) => (
+            <option key={availableDate} value={availableDate}>
+              {availableDate}
+            </option>
+          ))}
+        </select>
+      </label>
 
-        <input
-          type="time" // GONNA NEED TYPE VALIDATION
-          value={reformulateDate(bookingTime, "getTime")} // Kör våran bokningstid genom våran reformulateDate funktion så vi ger våran <input> rätt value
-          onChange={(e) => {
-            handleTimeOnChange(e);
-          }}
-        ></input>
+      <label>
+        Tid
+        <select value={time} onChange={handleChange(setTime)}>
+          {availableTimes.map((availableTime) => (
+            <option key={availableTime} value={availableTime}>
+              {availableTime}
+            </option>
+          ))}
+        </select>
+      </label>
 
-        <input // GONNA NEED TYPE VALIDATION
-          type="number"
-          min="1"
-          value={partySize}
-          onChange={(e) => {
-            takeAwaySubmitErrors();
-            setIsSubmitted(false);
+      <label>
+        Antal gäster
+        <select value={partySize} onChange={handleChange(setPartySize)}>
+          {availablePartySizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+      </label>
 
-            if (Number(e.target.value) >= 1) {
-              setPartySize(e.target.value);
-              setShowPartySizeError(false);
-            } else {
-              setPartySize(e.target.value);
-              setShowPartySizeError(true);
-            }
-          }}
-        ></input>
+      <button type="submit">Skicka bokningsförfrågan</button>
 
-        {showDateError && <p>Du kan inte välja ett datum som passerat</p>}
-        {showTimeError && <p>Du måste välja en tid</p>}
-        {showPartySizeError && <p>Du måste välja minst 1 gäst</p>}
-
-        <button type="submit">Skicka bokningsförfrågan</button>
-        {isSubmitted ? (
-          showSubmitApproved ? (
-            <p>Din bokningsförfrågan är skickad</p>
-          ) : (
-            <p>Se över din bokningsförfrågan och prova igen</p>
-          )
-        ) : (
-          <></>
-        )}
-      </form>
-      <p>
-        {bookingTime.toDateString()}-{(new Date).toDateString()}
-      </p>
-    </>
+      {submitted && isValid && <p>Din bokningsförfrågan är skickad</p>}
+      {submitted && !isValid && (
+        <p>Se över din bokningsförfrågan och prova igen</p>
+      )}
+    </form>
   );
 }
 
