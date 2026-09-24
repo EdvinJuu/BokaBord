@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "name": "Hörnet",
+    "address": "Götgatan 21, Stockholm",
+    "menu": "Köttbullar, pytt i panna och vegetarisk wallenbergare",
+    "descriptions": ["svensk mat", "familjärt"],
+    "openTime": [11, 22],
+    "totalTables": 16
+  },
+  {
+    "id": 2,
+    "name": "Bar Nord",
+    "address": "Norrlandsgatan 8, Stockholm",
+    "menu": "Osträtter, tartar och säsongens drinkar",
+    "descriptions": ["bar", "smårätter"],
+    "openTime": [16, 24],
+    "totalTables": 22
+  },
+  {
+    "id": 3,
+    "name": "Söderhavet",
+    "address": "Hornsgatan 88, Stockholm",
+    "menu": "Dagens fångst, musslor och fisksoppa",
+    "descriptions": ["fisk", "skaldjur"],
+    "openTime": [12, 22],
+    "totalTables": 24
+  },
+  {
+    "id": 4,
+    "name": "Lilla Torget",
+    "address": "Stora Nygatan 4, Stockholm",
+    "menu": "Dagens lunch, smörgåsar och fikabröd",
+    "descriptions": ["lunch", "café"],
+    "openTime": [8, 16],
+    "totalTables": 12
+  },
+  {
+    "id": 5,
+    "name": "Björkens Kök",
+    "address": "Odengatan 45, Stockholm",
+    "menu": "Vegetarisk avsmakning och säsongens grönsaker",
+    "descriptions": ["vegetariskt", "säsong"],
+    "openTime": [17, 23],
+    "totalTables": 20
+  },
+  {
+    "id": 6,
+    "name": "Kajkanten",
+    "address": "Strandvägen 7, Stockholm",
+    "menu": "Grillat, sallader och uteserveringens menyer",
+    "descriptions": ["uteservering", "modernt"],
+    "openTime": [11, 23],
+    "totalTables": 30
+  },
+  {
+    "id": 7,
+    "name": "Mormors Kök",
+    "address": "Folkungagatan 60, Stockholm",
+    "menu": "Ärtsoppa, pannkakor och husmanskost",
+    "descriptions": ["husmanskost", "familjärt"],
+    "openTime": [11, 21],
+    "totalTables": 14
+  },
+  {
+    "id": 8,
+    "name": "Nattlampan",
+    "address": "Bondegatan 31, Stockholm",
+    "menu": "Kvällens små rätter och vinpaket",
+    "descriptions": ["bar", "kväll"],
+    "openTime": [17, 24],
+    "totalTables": 10
+  },
+  {
+    "id": 9,
+    "name": "Pizzeria Pingvin",
+    "address": "Norra Drottninggatan 16, Uddevalla",
+    "menu": "Pizza, Kebab och sånt",
+    "descriptions": ["pizzeria", "nästan alltid"],
+    "openTime": [11, 22],
+    "totalTables": 10
+  }
+]
