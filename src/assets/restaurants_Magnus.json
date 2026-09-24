@@ -58,7 +58,7 @@
     "name": "Mormors Kök",
     "address": "Folkungagatan 60, Stockholm",
     "menu": "Ärtsoppa, pannkakor och husmanskost",
-    "descriptions": ["husmanskost", "familjärt"],
+    "descriptions": ["husmanskost", "familjärt", "kroppkakor"],
     "openTime": [11, 21],
     "totalTables": 14
   },
