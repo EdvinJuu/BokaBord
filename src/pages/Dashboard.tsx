@@ -1,13 +1,15 @@
 import { useBooking } from "../BookingContext"
+import { Navbar } from "../components/Navbar"
 
 const Dashboard = () => {
-
-  const {booking, setBooking} = useBooking()
+/* 
+  const {booking, setBooking} = useBooking() */
 
   return (
   <>
-  <p>{booking[0].partySize}</p>
-  <button onClick={() => setBooking([{ date: new Date(), partySize: 10 }])}>Set Booking</button>
+  <Navbar />
+{/*   <p>{booking[0].partySize}</p>
+  <button onClick={() => setBooking([{ date: new Date(), partySize: 10 }])}>Set Booking</button> */}
   </>
   )
 }

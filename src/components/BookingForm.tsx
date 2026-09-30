@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useBooking } from "../BookingContext";
 
 const availableTimes = [
   "11:00",
@@ -15,9 +16,11 @@ const availableTimes = [
   "20:30",
 ];
 
-const availablePartySizes = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const availablePartySizes = ["1", "2", "3", "4", "5", "6", "7", "8"]; // Byt ut till Integers, vi kan konvertera till string vid rendering (om det behövs)
 
 function getAvailableDates(daysAhead: number) {
+  
+
   const dates: string[] = [];
   const start = new Date();
 
@@ -31,21 +34,27 @@ function getAvailableDates(daysAhead: number) {
     dates.push(`${year}-${month}-${day}`);
   }
 
-  return dates;
+  return dates; // Se till att vi får en lista med Dates istället för strings
 }
 
-function BookingForm() {
+const BookingForm = () => {
+  const {booking, setBooking} = useBooking()
   const availableDates = getAvailableDates(14);
 
-  const [date, setDate] = useState(availableDates[0]);
+  const [date, setDate] = useState(availableDates[0]); // Se till att den böjar som en Date
   const [time, setTime] = useState("18:00");
   const [partySize, setPartySize] = useState("2");
   const [submitted, setSubmitted] = useState(false);
 
   const isValid =
-    availableDates.includes(date) &&
+    availableDates.includes(date) && //Jämför med datum objekt istället
     availableTimes.includes(time) &&
     availablePartySizes.includes(partySize);
+
+  function validateDate() {
+    // Jämför datumet med availableDates(och tiden)
+    //jämför datumet med öppettiderna från restaurangen
+  }
 
   function handleChange(setter: (value: string) => void) {
     return (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,8 +63,9 @@ function BookingForm() {
     };
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    setBooking({ date: new Date(), partySize: 5 }) // byt ut date: till det uppdatera och validerade datumet, samma för partySize
     setSubmitted(true);
   }
 
@@ -96,8 +106,9 @@ function BookingForm() {
 
       <button type="submit">Skicka bokningsförfrågan</button>
 
-      {submitted && isValid && <p>Din bokningsförfrågan är skickad</p>}
-      {submitted && !isValid && (
+      {submitted && isValid ? (
+        <p>Din bokningsförfrågan är skickad</p>
+      ) : (
         <p>Se över din bokningsförfrågan och prova igen</p>
       )}
     </form>

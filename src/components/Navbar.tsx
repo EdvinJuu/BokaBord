@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 
 export function Navbar() {
@@ -5,7 +6,8 @@ export function Navbar() {
     <header>
       <img src="" alt="LOGO" />
       <SearchBar />
-      <a href="" >Mina Sidor</a>
+      <Link to={"/dashboard"}>Dashboard</Link>
+      <Link to={"/"}>Home</Link>
     </header>
   );
 }

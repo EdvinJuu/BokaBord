@@ -1,23 +1,32 @@
 import { useParams } from "react-router-dom";
+import useReadJson from "../hooks/useReadJson";
 
-const testList = [
-  { id: 1, title: "test1" },
-  { id: 2, title: "test2" },
-  { id: 3, title: "test3" },
-  { id: 4, title: "test4" },
-];
 
 const RestaurantDetails = () => {
   const { id } = useParams();
+  const restaurants = useReadJson() // Kommer konverteras till hook som läser från servern
 
-    if (Number(id) === testList[0].id) {
-        return (<>JAG ÄR ID {id}, {testList[0].title}</>)
-    }
+  if (!id) return (<p>Restaurant was not found.</p>) // BYT UT MOT RIKTIG ERROR HANDLING
+
+  const currentRestaurant = restaurants.find(restaurant => id === restaurant.id.toString())
+
+   if (!currentRestaurant) return (<p>Restaurant was not found.</p>) // BYT UT MOT RIKTIG ERROR HANDLING
 
   return (
-    <>
-      <p>HEEJ!!!</p>
-    </>
+    <div>
+      <h2>{currentRestaurant.name}</h2>
+      <div>
+        {currentRestaurant.descriptions.map((description, i) => (
+          <div key={i}>
+            <p>{description}</p>
+          </div>
+        ))}
+      </div>
+      <div>
+        <img src="" alt="Pin Icon" />
+        <p>{currentRestaurant.address}</p>
+      </div>
+    </div>
   );
 };
 
