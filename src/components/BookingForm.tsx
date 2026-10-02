@@ -17,18 +17,21 @@ const availableTimes = [
 
 const availablePartySizes = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
+function toDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function getAvailableDates(daysAhead: number) {
-  const dates: string[] = [];
+  const dates: Date[] = [];
   const start = new Date();
 
   for (let i = 0; i < daysAhead; i++) {
-    const date = new Date(start);
-    date.setDate(start.getDate() + i);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    dates.push(`${year}-${month}-${day}`);
+    dates.push(
+      new Date(start.getFullYear(), start.getMonth(), start.getDate() + i),
+    );
   }
 
   return dates;
@@ -43,7 +46,9 @@ function BookingForm() {
   const [submitted, setSubmitted] = useState(false);
 
   const isValid =
-    availableDates.includes(date) &&
+    availableDates.some(
+      (availableDate) => toDateKey(availableDate) === toDateKey(date),
+    ) &&
     availableTimes.includes(time) &&
     availablePartySizes.includes(partySize);
 
@@ -52,6 +57,14 @@ function BookingForm() {
       setSubmitted(false);
       setter(e.target.value);
     };
+  }
+
+  function handleDateChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setSubmitted(false);
+    const next = availableDates.find(
+      (availableDate) => toDateKey(availableDate) === e.target.value,
+    );
+    if (next) setDate(next);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -63,10 +76,10 @@ function BookingForm() {
     <form onSubmit={handleSubmit}>
       <label>
         Datum
-        <select value={date} onChange={handleChange(setDate)}>
+        <select value={toDateKey(date)} onChange={handleDateChange}>
           {availableDates.map((availableDate) => (
-            <option key={availableDate} value={availableDate}>
-              {availableDate}
+            <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
+              {toDateKey(availableDate)}
             </option>
           ))}
         </select>
