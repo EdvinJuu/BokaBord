@@ -1,3 +1,5 @@
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import { useBooking } from "../BookingContext"
 
 const Dashboard = () => {
@@ -5,10 +7,14 @@ const Dashboard = () => {
   const {booking, setBooking} = useBooking()
 
   return (
-  <>
-  <p>{booking[0].partySize}</p>
-  <button onClick={() => setBooking([{ date: new Date(), partySize: 10 }])}>Set Booking</button>
-  </>
+    <Card>
+      <Card.Body>
+        <p>{booking[0].partySize}</p>
+        <Button variant="danger" onClick={() => setBooking([{ date: new Date(), partySize: 10 }])}>
+          Set Booking
+        </Button>
+      </Card.Body>
+    </Card>
   )
 }
 

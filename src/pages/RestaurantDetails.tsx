@@ -1,3 +1,4 @@
+import Card from "react-bootstrap/Card";
 import { useParams } from "react-router-dom";
 
 const testList = [
@@ -11,13 +12,17 @@ const RestaurantDetails = () => {
   const { id } = useParams();
 
     if (Number(id) === testList[0].id) {
-        return (<>JAG ÄR ID {id}, {testList[0].title}</>)
+        return (
+          <Card>
+            <Card.Body>JAG ÄR ID {id}, {testList[0].title}</Card.Body>
+          </Card>
+        )
     }
 
   return (
-    <>
-      <p>HEEJ!!!</p>
-    </>
+    <Card>
+      <Card.Body>HEEJ!!!</Card.Body>
+    </Card>
   );
 };
 

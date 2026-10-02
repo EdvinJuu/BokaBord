@@ -1,4 +1,10 @@
 import { useState } from "react";
+import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
 
 const availableTimes = [
   "11:00",
@@ -73,47 +79,66 @@ function BookingForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Datum
-        <select value={toDateKey(date)} onChange={handleDateChange}>
-          {availableDates.map((availableDate) => (
-            <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
-              {toDateKey(availableDate)}
-            </option>
-          ))}
-        </select>
-      </label>
+    <Card className="shadow-sm sticky-lg-top" style={{ top: "5.5rem" }}>
+      <Card.Body>
+        <Card.Title as="h2">Boka bord</Card.Title>
+        <Card.Text className="text-secondary">Välj tid och antal gäster.</Card.Text>
+        <Form onSubmit={handleSubmit}>
+          <Row className="g-3">
+            <Col md={6}>
+              <Form.Group controlId="booking-date">
+                <Form.Label>Datum</Form.Label>
+                <Form.Select value={toDateKey(date)} onChange={handleDateChange}>
+                  {availableDates.map((availableDate) => (
+                    <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
+                      {toDateKey(availableDate)}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group controlId="booking-time">
+                <Form.Label>Tid</Form.Label>
+                <Form.Select value={time} onChange={handleChange(setTime)}>
+                  {availableTimes.map((availableTime) => (
+                    <option key={availableTime} value={availableTime}>
+                      {availableTime}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
 
-      <label>
-        Tid
-        <select value={time} onChange={handleChange(setTime)}>
-          {availableTimes.map((availableTime) => (
-            <option key={availableTime} value={availableTime}>
-              {availableTime}
-            </option>
-          ))}
-        </select>
-      </label>
+          <Form.Group className="mt-3" controlId="booking-party">
+            <Form.Label>Antal gäster</Form.Label>
+            <Form.Select value={partySize} onChange={handleChange(setPartySize)}>
+              {availablePartySizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
 
-      <label>
-        Antal gäster
-        <select value={partySize} onChange={handleChange(setPartySize)}>
-          {availablePartySizes.map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
-        </select>
-      </label>
+          <Button type="submit" variant="danger" className="mt-3 w-100">
+            Skicka bokningsförfrågan
+          </Button>
 
-      <button type="submit">Skicka bokningsförfrågan</button>
-
-      {submitted && isValid && <p>Din bokningsförfrågan är skickad</p>}
-      {submitted && !isValid && (
-        <p>Se över din bokningsförfrågan och prova igen</p>
-      )}
-    </form>
+          {submitted && isValid && (
+            <Alert variant="success" className="mt-3 mb-0">
+              Din bokningsförfrågan är skickad
+            </Alert>
+          )}
+          {submitted && !isValid && (
+            <Alert variant="danger" className="mt-3 mb-0">
+              Se över din bokningsförfrågan och prova igen
+            </Alert>
+          )}
+        </Form>
+      </Card.Body>
+    </Card>
   );
 }
 
