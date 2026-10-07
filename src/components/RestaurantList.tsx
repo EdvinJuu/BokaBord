@@ -1,5 +1,3 @@
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import { RestaurantCard } from "../components/RestaurantCard";
 import type { RestaurantProps } from "../types";
 
@@ -43,23 +41,21 @@ import type { RestaurantProps } from "../types";
 
 function RestaurantList({ restaurants }: { restaurants: RestaurantProps[] }) {
   return (
-    <>
-      <Row className="g-3">
-        {restaurants.map((restaurant) => (
-          <Col key={restaurant.id} xs={12}>
-            <RestaurantCard
-              id={restaurant.id}
-              name={restaurant.name}
-              address={restaurant.address}
-              descriptions={restaurant.descriptions}
-              menu={restaurant.menu}
-              openTime={restaurant.openTime}
-              totalTables={restaurant.totalTables}
-            />
-          </Col>
-        ))}
-      </Row>
-    </>
+    <ul className="restaurant-list">
+      {restaurants.map((restaurant) => (
+        <li key={restaurant.id}>
+          <RestaurantCard
+            id={restaurant.id}
+            name={restaurant.name}
+            address={restaurant.address}
+            descriptions={restaurant.descriptions}
+            menu={restaurant.menu}
+            openTime={restaurant.openTime}
+            totalTables={restaurant.totalTables}
+          />
+        </li>
+      ))}
+    </ul>
   );
 }
 

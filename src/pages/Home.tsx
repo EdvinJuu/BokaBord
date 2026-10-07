@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import Alert from "react-bootstrap/Alert";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Spinner from "react-bootstrap/Spinner";
 import BookingForm from "../components/BookingForm";
 import RestaurantList from "../components/RestaurantList";
 import type { RestaurantProps } from "../types";
-import restaurantsUrl from "../assets/restaurants.json?url";
+import "./Home.css";
 
 function Home() {
   const [restaurants, setRestaurants] = useState<RestaurantProps[] | null>(null);
@@ -15,7 +11,7 @@ function Home() {
   useEffect(() => {
     let ignore = false;
 
-    fetch(restaurantsUrl)
+    fetch("/api/restaurants")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Kunde inte hämta restauranger");
@@ -35,22 +31,26 @@ function Home() {
   }, []);
 
   return (
-    <Row className="g-4">
-      <Col lg={5} className="order-1 order-lg-2">
-        <BookingForm />
-      </Col>
-      <Col lg={7} className="order-2 order-lg-1">
-        <h1 className="mb-4">Restauranger</h1>
+    <div className="home">
+      <section className="home-results">
+        <h1>Restauranger</h1>
         {restaurants === null && !error && (
-          <p className="text-secondary">
-            <Spinner animation="border" size="sm" className="me-2" role="status" />
+          <p className="status" role="status">
+            <span className="spinner" aria-hidden="true" />
             Hämtar restauranger...
           </p>
         )}
-        {error && <Alert variant="danger">{error}</Alert>}
+        {error && (
+          <p className="alert alert-error" role="alert">
+            {error}
+          </p>
+        )}
         {restaurants && <RestaurantList restaurants={restaurants} />}
-      </Col>
-    </Row>
+      </section>
+      <div className="home-booking">
+        <BookingForm />
+      </div>
+    </div>
   );
 }
 

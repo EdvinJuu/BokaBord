@@ -1,0 +1,57 @@
+.details {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.details h1 {
+  margin: 0 0 14px;
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.details-back {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.details-back:hover,
+.details-back:focus-visible {
+  color: var(--ink);
+}
+
+.details-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.details-chip {
+  background: var(--chip);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.details-menu {
+  margin: 0 0 8px;
+}
+
+.details-meta,
+.details-message {
+  margin: 0;
+  color: var(--muted);
+}
+
+.details-message {
+  margin-bottom: 16px;
+}

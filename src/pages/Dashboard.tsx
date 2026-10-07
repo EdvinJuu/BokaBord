@@ -1,20 +1,21 @@
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
 import { useBooking } from "../BookingContext"
+import "./Dashboard.css";
 
 const Dashboard = () => {
 
   const {booking, setBooking} = useBooking()
 
   return (
-    <Card>
-      <Card.Body>
-        <p>{booking[0].partySize}</p>
-        <Button variant="danger" onClick={() => setBooking([{ date: new Date(), partySize: 10 }])}>
-          Set Booking
-        </Button>
-      </Card.Body>
-    </Card>
+    <article className="dashboard">
+      <p>{booking[0].partySize}</p>
+      <button
+        type="button"
+        className="dashboard-button"
+        onClick={() => setBooking([{ date: new Date(), partySize: 10 }])}
+      >
+        Set Booking
+      </button>
+    </article>
   )
 }
 

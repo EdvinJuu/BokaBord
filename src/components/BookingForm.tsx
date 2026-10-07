@@ -1,10 +1,4 @@
-import { useState } from "react";
-import Alert from "react-bootstrap/Alert";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 const availableTimes = [
   "11:00",
@@ -59,13 +53,13 @@ function BookingForm() {
     availablePartySizes.includes(partySize);
 
   function handleChange(setter: (value: string) => void) {
-    return (e: React.ChangeEvent<HTMLSelectElement>) => {
+    return (e: ChangeEvent<HTMLSelectElement>) => {
       setSubmitted(false);
       setter(e.target.value);
     };
   }
 
-  function handleDateChange(e: React.ChangeEvent<HTMLSelectElement>) {
+  function handleDateChange(e: ChangeEvent<HTMLSelectElement>) {
     setSubmitted(false);
     const next = availableDates.find(
       (availableDate) => toDateKey(availableDate) === e.target.value,
@@ -73,72 +67,64 @@ function BookingForm() {
     if (next) setDate(next);
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitted(true);
   }
 
   return (
-    <Card className="shadow-sm sticky-lg-top" style={{ top: "5.5rem" }}>
-      <Card.Body>
-        <Card.Title as="h2">Boka bord</Card.Title>
-        <Card.Text className="text-secondary">Välj tid och antal gäster.</Card.Text>
-        <Form onSubmit={handleSubmit}>
-          <Row className="g-3">
-            <Col md={6}>
-              <Form.Group controlId="booking-date">
-                <Form.Label>Datum</Form.Label>
-                <Form.Select value={toDateKey(date)} onChange={handleDateChange}>
-                  {availableDates.map((availableDate) => (
-                    <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
-                      {toDateKey(availableDate)}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="booking-time">
-                <Form.Label>Tid</Form.Label>
-                <Form.Select value={time} onChange={handleChange(setTime)}>
-                  {availableTimes.map((availableTime) => (
-                    <option key={availableTime} value={availableTime}>
-                      {availableTime}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Form.Group className="mt-3" controlId="booking-party">
-            <Form.Label>Antal gäster</Form.Label>
-            <Form.Select value={partySize} onChange={handleChange(setPartySize)}>
-              {availablePartySizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
+    <aside className="booking">
+      <h2>Boka bord</h2>
+      <p>Välj tid och antal gäster.</p>
+      <form onSubmit={handleSubmit}>
+        <div className="booking-row">
+          <label>
+            Datum
+            <select value={toDateKey(date)} onChange={handleDateChange}>
+              {availableDates.map((availableDate) => (
+                <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
+                  {toDateKey(availableDate)}
                 </option>
               ))}
-            </Form.Select>
-          </Form.Group>
+            </select>
+          </label>
+          <label>
+            Tid
+            <select value={time} onChange={handleChange(setTime)}>
+              {availableTimes.map((availableTime) => (
+                <option key={availableTime} value={availableTime}>
+                  {availableTime}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
-          <Button type="submit" variant="danger" className="mt-3 w-100">
-            Skicka bokningsförfrågan
-          </Button>
+        <label>
+          Antal gäster
+          <select value={partySize} onChange={handleChange(setPartySize)}>
+            {availablePartySizes.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </label>
 
-          {submitted && isValid && (
-            <Alert variant="success" className="mt-3 mb-0">
-              Din bokningsförfrågan är skickad
-            </Alert>
-          )}
-          {submitted && !isValid && (
-            <Alert variant="danger" className="mt-3 mb-0">
-              Se över din bokningsförfrågan och prova igen
-            </Alert>
-          )}
-        </Form>
-      </Card.Body>
-    </Card>
+        <button type="submit">Skicka bokningsförfrågan</button>
+
+        {submitted && isValid && (
+          <p className="alert alert-ok" role="status">
+            Din bokningsförfrågan är skickad
+          </p>
+        )}
+        {submitted && !isValid && (
+          <p className="alert alert-error" role="alert">
+            Se över din bokningsförfrågan och prova igen
+          </p>
+        )}
+      </form>
+    </aside>
   );
 }
 
