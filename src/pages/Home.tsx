@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import BookingForm from "../components/BookingForm";
 import RestaurantList from "../components/RestaurantList";
@@ -11,15 +12,10 @@ function Home() {
   useEffect(() => {
     let ignore = false;
 
-    fetch("/api/restaurants")
+    axios
+      .get<RestaurantProps[]>("/api/restaurants")
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Kunde inte hämta restauranger");
-        }
-        return response.json();
-      })
-      .then((data: RestaurantProps[]) => {
-        if (!ignore) setRestaurants(data);
+        if (!ignore) setRestaurants(response.data);
       })
       .catch(() => {
         if (!ignore) setError("Kunde inte hämta restauranger");
