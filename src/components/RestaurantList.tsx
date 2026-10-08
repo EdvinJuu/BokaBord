@@ -1,6 +1,6 @@
 import { RestaurantCard } from "../components/RestaurantCard";
 import type { RestaurantProps } from "../types";
-import "./RestaurantList.css"
+import "./RestaurantList.css";
 
 /* const testRestaurants: RestaurantProps[] = [
   {
@@ -40,24 +40,18 @@ import "./RestaurantList.css"
   },
 ]; */
 
-function RestaurantList({ restaurants }: { restaurants: RestaurantProps[] }) {
+interface RestaurantListProps {
+  restaurants: RestaurantProps[];
+}
+
+function RestaurantList({ restaurants }: RestaurantListProps) {
   return (
-    <ul className="restaurant-list">
+    <ul className="restaurant-list-container">
       {restaurants.map((restaurant) => (
-        <li key={restaurant.id}>
-          <RestaurantCard
-            id={restaurant.id}
-            name={restaurant.name}
-            address={restaurant.address}
-            descriptions={restaurant.descriptions}
-            menu={restaurant.menu}
-            openTime={restaurant.openTime}
-            totalTables={restaurant.totalTables}
-          />
-        </li>
+        <RestaurantCard key={restaurant.id} restaurant={restaurant} />
       ))}
     </ul>
   );
 }
 
-export default RestaurantList
+export default RestaurantList;
