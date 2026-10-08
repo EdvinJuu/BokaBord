@@ -39,6 +39,7 @@ function getAvailableDates(daysAhead: number) {
   return dates; // Se till att vi får en lista med Dates istället för strings
 }
 
+
 const BookingForm = () => {
   const { booking, setBooking } = useBooking();
   const availableDates = getAvailableDates(14);
