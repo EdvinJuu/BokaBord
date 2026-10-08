@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useBooking } from "../BookingContext";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 const availableTimes = [
   "11:00",
@@ -18,20 +18,21 @@ const availableTimes = [
 
 const availablePartySizes = ["1", "2", "3", "4", "5", "6", "7", "8"]; // Byt ut till Integers, vi kan konvertera till string vid rendering (om det behövs)
 
-function getAvailableDates(daysAhead: number) {
-  
+function toDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
-  const dates: string[] = [];
+function getAvailableDates(daysAhead: number) {
+  const dates: Date[] = [];
   const start = new Date();
 
   for (let i = 0; i < daysAhead; i++) {
-    const date = new Date(start);
-    date.setDate(start.getDate() + i);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    dates.push(`${year}-${month}-${day}`);
+    dates.push(
+      new Date(start.getFullYear(), start.getMonth(), start.getDate() + i),
+    );
   }
 
   return dates; // Se till att vi får en lista med Dates istället för strings
@@ -47,7 +48,9 @@ const BookingForm = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const isValid =
-    availableDates.includes(date) && //Jämför med datum objekt istället
+    availableDates.some(
+      (availableDate) => toDateKey(availableDate) === toDateKey(date),
+    ) &&
     availableTimes.includes(time) &&
     availablePartySizes.includes(partySize);
 
@@ -57,61 +60,79 @@ const BookingForm = () => {
   }
 
   function handleChange(setter: (value: string) => void) {
-    return (e: React.ChangeEvent<HTMLSelectElement>) => {
+    return (e: ChangeEvent<HTMLSelectElement>) => {
       setSubmitted(false);
       setter(e.target.value);
     };
   }
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  function handleDateChange(e: ChangeEvent<HTMLSelectElement>) {
+    setSubmitted(false);
+    const next = availableDates.find(
+      (availableDate) => toDateKey(availableDate) === e.target.value,
+    );
+    if (next) setDate(next);
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBooking({ date: new Date(), partySize: 5 }) // byt ut date: till det uppdatera och validerade datumet, samma för partySize
     setSubmitted(true);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Datum
-        <select value={date} onChange={handleChange(setDate)}>
-          {availableDates.map((availableDate) => (
-            <option key={availableDate} value={availableDate}>
-              {availableDate}
-            </option>
-          ))}
-        </select>
-      </label>
+    <aside className="booking">
+      <h2>Boka bord</h2>
+      <p>Välj tid och antal gäster.</p>
+      <form onSubmit={handleSubmit}>
+        <div className="booking-row">
+          <label>
+            Datum
+            <select value={toDateKey(date)} onChange={handleDateChange}>
+              {availableDates.map((availableDate) => (
+                <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
+                  {toDateKey(availableDate)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Tid
+            <select value={time} onChange={handleChange(setTime)}>
+              {availableTimes.map((availableTime) => (
+                <option key={availableTime} value={availableTime}>
+                  {availableTime}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
-      <label>
-        Tid
-        <select value={time} onChange={handleChange(setTime)}>
-          {availableTimes.map((availableTime) => (
-            <option key={availableTime} value={availableTime}>
-              {availableTime}
-            </option>
-          ))}
-        </select>
-      </label>
+        <label>
+          Antal gäster
+          <select value={partySize} onChange={handleChange(setPartySize)}>
+            {availablePartySizes.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </label>
 
-      <label>
-        Antal gäster
-        <select value={partySize} onChange={handleChange(setPartySize)}>
-          {availablePartySizes.map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
-        </select>
-      </label>
+        <button type="submit">Skicka bokningsförfrågan</button>
 
-      <button type="submit">Skicka bokningsförfrågan</button>
-
-      {submitted && isValid ? (
-        <p>Din bokningsförfrågan är skickad</p>
-      ) : (
-        <p>Se över din bokningsförfrågan och prova igen</p>
-      )}
-    </form>
+        {submitted &&( isValid ? ( // validera att den visar rätt state
+          <p className="alert alert-ok" role="status">
+            Din bokningsförfrågan är skickad
+          </p>
+        )
+        : (
+          <p className="alert alert-error" role="alert">
+            Se över din bokningsförfrågan och prova igen
+          </p>
+        ))}
+      </form>
+    </aside>
   );
 }
 

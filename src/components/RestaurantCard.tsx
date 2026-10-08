@@ -3,20 +3,36 @@ import type { RestaurantProps } from "../types";
 import "./RestaurantCard.css"
 
 
-interface RestaurantCardProps {
-  restaurant: RestaurantProps;
-}
+export function RestaurantCard({
+  id,
+  name,
+  address,
+  descriptions,
+  menu,
+  openTime,
+}: RestaurantProps) {
+/*   if (!descriptions) return null; */
 
-export function RestaurantCard({restaurant} : RestaurantCardProps) {
+  const hours =
+    openTime.length >= 2 ? ` · Öppet ${openTime[0]}–${openTime[1]}` : "";
 
   return (
-    <Link to={`/restaurant/${restaurant.id}`} className="restaurant-card">
-      <h2>{restaurant.name}</h2>
-      <p>
-        <strong>{restaurant.descriptions.join(" • ")}</strong>
+    <article className="restaurant-card">
+      <h2>
+        <Link to={`/restaurant/${id}`}>{name}</Link>
+      </h2>
+      <div className="chips">
+        {descriptions.map((description, index) => (
+          <span className="chip" key={`${description}-${index}`}>
+            {description}
+          </span>
+        ))}
+      </div>
+      <p className="menu">{menu}</p>
+      <p className="address">
+        {address}
+        {hours}
       </p>
-      <p>{restaurant.address}</p>
-    </Link>
+    </article>
   );
 }
-

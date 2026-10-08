@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
-import useReadJson from "../hooks/useReadJson";
-
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import type { RestaurantProps } from "../types";
+import "./RestaurantDetails.css";
 
 const RestaurantDetails = () => {
   const { id } = useParams();
@@ -13,20 +14,25 @@ const RestaurantDetails = () => {
    if (!currentRestaurant) return (<p>Restaurant was not found.</p>) // BYT UT MOT RIKTIG ERROR HANDLING
 
   return (
-    <div>
-      <h2>{currentRestaurant.name}</h2>
-      <div>
-        {currentRestaurant.descriptions.map((description, i) => (
-          <div key={i}>
-            <p>{description}</p>
-          </div>
+    <article className="details">
+      <Link className="details-back" to="/">
+        Alla restauranger
+      </Link>
+      <h1>{restaurant.name}</h1>
+      <div className="details-chips">
+        {restaurant.descriptions.map((description, index) => (
+          <span className="details-chip" key={`${description}-${index}`}>
+            {description}
+          </span>
         ))}
       </div>
-      <div>
-        <img src="" alt="Pin Icon" />
-        <p>{currentRestaurant.address}</p>
-      </div>
-    </div>
+      <p className="details-menu">{restaurant.menu}</p>
+      <p className="details-meta">
+        {restaurant.address}
+        {hours ? ` · ${hours}` : ""}
+        {` · ${restaurant.totalTables} bord`}
+      </p>
+    </article>
   );
 };
 

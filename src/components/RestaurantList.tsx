@@ -40,31 +40,23 @@ import "./RestaurantList.css"
   },
 ]; */
 
-interface RestaurantListProps {
-  restaurants: RestaurantProps[];
-
-}
-
-function RestaurantList({restaurants}: RestaurantListProps) {
-  
-
+function RestaurantList({ restaurants }: { restaurants: RestaurantProps[] }) {
   return (
-    <>
-      <ul className="restaurant-list-container">
-        {restaurants.map((restaurant) => (
+    <ul className="restaurant-list">
+      {restaurants.map((restaurant) => (
+        <li key={restaurant.id}>
           <RestaurantCard
-            key={restaurant.id}
             id={restaurant.id}
             name={restaurant.name}
             address={restaurant.address}
             descriptions={restaurant.descriptions}
-            menu=""
+            menu={restaurant.menu}
             openTime={restaurant.openTime}
             totalTables={restaurant.totalTables}
           />
-        ))}
-      </ul>
-    </>
+        </li>
+      ))}
+    </ul>
   );
 }
 

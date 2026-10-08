@@ -3,11 +3,14 @@ import { SearchBar } from "./SearchBar";
 
 export function Navbar() {
   return (
-    <header>
-      <img src="" alt="LOGO" />
+    <header className="site-header">
+      <Link className="logo" to="/">
+        BokaBord
+      </Link>
       <SearchBar />
-      <Link to={"/dashboard"}>Dashboard</Link>
-      <Link to={"/"}>Home</Link>
+      <Link className="nav-link" to="/Dashboard">
+        Mina Sidor
+      </Link>
     </header>
   );
 }
