@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { RestaurantProps } from "../types";
 import "./RestaurantDetails.css";
+import useReadJson from "../hooks/useReadJson";
 
 const RestaurantDetails = () => {
   const { id } = useParams();
