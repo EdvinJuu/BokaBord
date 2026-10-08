@@ -14,7 +14,7 @@ export const useRead = () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get<RestaurantProps[]>("http://localhost:3001/restaurants")
+        const response = await axios.get<RestaurantProps[]>("http://localhost:5001/api/restaurants")
         const data = await response.data
         setRestaurants(data);
       } catch (error) {

@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 import type { RestaurantProps } from "../types";
-import "./RestaurantCard.css"
+import "./RestaurantCard.css";
 
+interface restaurant {
+  restaurant: RestaurantProps;
+}
 
-export function RestaurantCard({
-  id,
-  name,
-  address,
-  descriptions,
-  menu,
-  openTime,
-}: RestaurantProps) {
-/*   if (!descriptions) return null; */
+export function RestaurantCard({ restaurant }: restaurant) {
+  /*   if (!descriptions) return null; */
+
+  const { openTime, id, name, descriptions, menu, address } = restaurant;
 
   const hours =
-    openTime.length >= 2 ? ` · Öppet ${openTime[0]}–${openTime[1]}` : "";
+    restaurant.openTime.length >= 2
+      ? ` · Öppet ${openTime[0]}–${openTime[1]}`
+      : "";
 
   return (
     <article className="restaurant-card">
