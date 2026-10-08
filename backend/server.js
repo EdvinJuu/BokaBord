@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
+/* import restaurantsJson from "./assets/restaurants.json" */ // KAN VARA EN BÄTTRE LÖSNING?
 
 // Import CORS (Cross-Origin Resource Sharing) middleware to 
 // allow web apps on different domains/ports 
@@ -17,7 +18,7 @@ const app = express()
 // will listen for incoming requests
 const PORT = 5001; // 5001
 
-const restaurantsPath = join(
+const restaurantsPath = join( // dubbelkolla att vi följer industristandarder
     dirname(fileURLToPath(import.meta.url)),
     'assets/restaurants.json',
 );
@@ -25,6 +26,7 @@ const restaurantsPath = join(
 async function readRestaurants() {
     const raw = await readFile(restaurantsPath, 'utf8');
     const restaurants = JSON.parse(raw);
+    /* const restaurants = JSON.parse(restaurantsJson); */ // KAN VARA EN BÄTTRE LÖSNING?
 
     if (!Array.isArray(restaurants)) {
         throw new Error('Kunde inte läsa restauranger');
