@@ -1,3 +1,5 @@
+import "./SearchBar.css";
+
 export function SearchBar() {
   return (
     <form className="search" role="search" onSubmit={(event) => event.preventDefault()}>

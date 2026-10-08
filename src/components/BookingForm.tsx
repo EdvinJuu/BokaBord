@@ -1,5 +1,6 @@
 import { useBooking } from "../BookingContext";
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import "./BookingForm.css";
 
 const availableTimes = [
   "11:00",
@@ -39,7 +40,7 @@ function getAvailableDates(daysAhead: number) {
 }
 
 const BookingForm = () => {
-  const {booking, setBooking} = useBooking()
+  const { booking, setBooking } = useBooking();
   const availableDates = getAvailableDates(14);
 
   const [date, setDate] = useState(availableDates[0]); // Se till att den böjar som en Date
@@ -76,7 +77,7 @@ const BookingForm = () => {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setBooking({ date: new Date(), partySize: 5 }) // byt ut date: till det uppdatera och validerade datumet, samma för partySize
+    setBooking({ date: new Date(), partySize: 5 }); // byt ut date: till det uppdatera och validerade datumet, samma för partySize
     setSubmitted(true);
   }
 
@@ -90,7 +91,10 @@ const BookingForm = () => {
             Datum
             <select value={toDateKey(date)} onChange={handleDateChange}>
               {availableDates.map((availableDate) => (
-                <option key={toDateKey(availableDate)} value={toDateKey(availableDate)}>
+                <option
+                  key={toDateKey(availableDate)}
+                  value={toDateKey(availableDate)}
+                >
                   {toDateKey(availableDate)}
                 </option>
               ))}
@@ -121,19 +125,19 @@ const BookingForm = () => {
 
         <button type="submit">Skicka bokningsförfrågan</button>
 
-        {submitted &&( isValid ? ( // validera att den visar rätt state
-          <p className="alert alert-ok" role="status">
-            Din bokningsförfrågan är skickad
-          </p>
-        )
-        : (
-          <p className="alert alert-error" role="alert">
-            Se över din bokningsförfrågan och prova igen
-          </p>
-        ))}
+        {submitted &&
+          (isValid ? ( // validera att den visar rätt state
+            <p className="alert alert-ok" role="status">
+              Din bokningsförfrågan är skickad
+            </p>
+          ) : (
+            <p className="alert alert-error" role="alert">
+              Se över din bokningsförfrågan och prova igen
+            </p>
+          ))}
       </form>
     </aside>
   );
-}
+};
 
 export default BookingForm;

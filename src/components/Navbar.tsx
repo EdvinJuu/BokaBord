@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
+import "./Navbar.css";
 
 export function Navbar() {
   return (
