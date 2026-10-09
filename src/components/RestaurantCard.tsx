@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import type { RestaurantProps } from "../types";
 
@@ -11,6 +12,7 @@ export function RestaurantCard({
   address,
   descriptions,
   menu,
+  image,
   openTime,
 }: RestaurantProps) {
   if (!descriptions) return null;
@@ -18,8 +20,12 @@ export function RestaurantCard({
   const hours =
     openTime.length >= 2 ? ` · Öppet ${openTime[0]}–${openTime[1]}` : "";
 
+  const cardStyle = {
+    "--card-photo": `url("${image}")`,
+  } as CSSProperties;
+
   return (
-    <article className="restaurant-card">
+    <article className="restaurant-card" style={cardStyle}>
       <h2>
         <Link to={`/restaurant/${id}`}>{name}</Link>
       </h2>

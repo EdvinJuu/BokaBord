@@ -52,6 +52,16 @@
   color: var(--muted);
 }
 
+.details-photo {
+  display: block;
+  width: 100%;
+  height: clamp(260px, 38vw, 440px);
+  margin-top: 24px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
+}
+
 .details-message {
   margin-bottom: 16px;
 }

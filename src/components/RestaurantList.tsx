@@ -50,6 +50,7 @@ function RestaurantList({ restaurants }: { restaurants: RestaurantProps[] }) {
             address={restaurant.address}
             descriptions={restaurant.descriptions}
             menu={restaurant.menu}
+            image={restaurant.image}
             openTime={restaurant.openTime}
             totalTables={restaurant.totalTables}
           />

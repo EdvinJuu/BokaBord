@@ -4,6 +4,7 @@ export interface RestaurantProps{
     name: string;
     address: string;
     menu: string;
+    image: string;
     descriptions: string[]; // ["svensk mat", "familiärt", "bar"] Badge.tsx 
     openTime: number[]; // Specifiera att endast två nummer får vara i listan
     totalTables: number;

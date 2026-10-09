@@ -83,6 +83,13 @@ const RestaurantDetails = () => {
         {hours ? ` · ${hours}` : ""}
         {` · ${restaurant.totalTables} bord`}
       </p>
+      {restaurant.image && (
+        <img
+          className="details-photo"
+          src={restaurant.image}
+          alt={restaurant.name}
+        />
+      )}
     </article>
   );
 };

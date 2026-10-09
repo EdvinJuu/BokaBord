@@ -18,10 +18,14 @@ const app = express()
 // will listen for incoming requests
 const PORT = 5001; // 5001
 
+const serverDir = dirname(fileURLToPath(import.meta.url));
+
 const restaurantsPath = join( // dubbelkolla att vi följer industristandarder
-    dirname(fileURLToPath(import.meta.url)),
+    serverDir,
     'assets/restaurants.json',
 );
+
+const picturesPath = join(serverDir, 'assets/Pictures');
 
 async function readRestaurants() {
     const raw = await readFile(restaurantsPath, 'utf8');
@@ -39,6 +43,9 @@ async function readRestaurants() {
 // security blocks when a frontend app 
 // (e.g., React on port 3000) tries to talk to this backend.
 app.use(cors());
+
+// Bilder döpta efter restaurangens id, till exempel /api/pictures/1.jpg
+app.use('/api/pictures', express.static(picturesPath));
 
 // Use Express's built-in middleware to automatically parse 
 // incoming HTTP requests that contain JSON data 

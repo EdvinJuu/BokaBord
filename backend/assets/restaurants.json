@@ -4,6 +4,7 @@
     "name": "Hörnet",
     "address": "Götgatan 21, Stockholm",
     "menu": "Köttbullar, pytt i panna och vegetarisk wallenbergare",
+    "image": "/api/pictures/1.jpg",
     "descriptions": ["svensk mat", "familjärt"],
     "openTime": [11, 22],
     "totalTables": 16
@@ -13,6 +14,7 @@
     "name": "Bar Nord",
     "address": "Norrlandsgatan 8, Stockholm",
     "menu": "Osträtter, tartar och säsongens drinkar",
+    "image": "/api/pictures/2.jpg",
     "descriptions": ["bar", "smårätter"],
     "openTime": [16, 24],
     "totalTables": 22
@@ -22,6 +24,7 @@
     "name": "Söderhavet",
     "address": "Hornsgatan 88, Stockholm",
     "menu": "Dagens fångst, musslor och fisksoppa",
+    "image": "/api/pictures/3.jpg",
     "descriptions": ["fisk", "skaldjur"],
     "openTime": [12, 22],
     "totalTables": 24
@@ -31,6 +34,7 @@
     "name": "Lilla Torget",
     "address": "Stora Nygatan 4, Stockholm",
     "menu": "Dagens lunch, smörgåsar och fikabröd",
+    "image": "/api/pictures/4.jpg",
     "descriptions": ["lunch", "café"],
     "openTime": [8, 16],
     "totalTables": 12
@@ -40,6 +44,7 @@
     "name": "Björkens Kök",
     "address": "Odengatan 45, Stockholm",
     "menu": "Vegetarisk avsmakning och säsongens grönsaker",
+    "image": "/api/pictures/5.jpg",
     "descriptions": ["vegetariskt", "säsong"],
     "openTime": [17, 23],
     "totalTables": 20
@@ -49,6 +54,7 @@
     "name": "Kajkanten",
     "address": "Strandvägen 7, Stockholm",
     "menu": "Grillat, sallader och uteserveringens menyer",
+    "image": "/api/pictures/6.jpg",
     "descriptions": ["uteservering", "modernt"],
     "openTime": [11, 23],
     "totalTables": 30
@@ -58,6 +64,7 @@
     "name": "Mormors Kök",
     "address": "Folkungagatan 60, Stockholm",
     "menu": "Ärtsoppa, pannkakor och husmanskost",
+    "image": "/api/pictures/7.jpg",
     "descriptions": ["husmanskost", "familjärt", "kroppkakor"],
     "openTime": [11, 21],
     "totalTables": 14
@@ -67,6 +74,7 @@
     "name": "Nattlampan",
     "address": "Bondegatan 31, Stockholm",
     "menu": "Kvällens små rätter och vinpaket",
+    "image": "/api/pictures/8.jpg",
     "descriptions": ["bar", "kväll"],
     "openTime": [17, 24],
     "totalTables": 10
@@ -76,6 +84,7 @@
     "name": "Pizzeria Pingvin",
     "address": "Norra Drottninggatan 16, Uddevalla",
     "menu": "Pizza, Kebab och sånt",
+    "image": "/api/pictures/9.jpg",
     "descriptions": ["pizzeria", "nästan alltid"],
     "openTime": [11, 22],
     "totalTables": 10
