@@ -13,26 +13,24 @@ export function RestaurantCard({ restaurant }: restaurant) {
 
   const hours =
     restaurant.openTime.length >= 2
-      ? ` · Öppet ${openTime[0]}–${openTime[1]}`
+      ? `Öppet ${openTime[0]}–${openTime[1]}`
       : "";
 
   return (
     <article className="restaurant-card">
-      <h2>
-        <Link to={`/restaurant/${id}`}>{name}</Link>
-      </h2>
-      <div className="chips">
-        {descriptions.map((description, index) => (
-          <span className="chip" key={`${description}-${index}`}>
-            {description}
-          </span>
-        ))}
-      </div>
-      <p className="menu">{menu}</p>
-      <p className="address">
-        {address}
-        {hours}
-      </p>
+      <Link to={`/restaurant/${id}`}>
+        <h2>{name}</h2>
+        <div className="chips">
+          {descriptions.map((description, index) => (
+            <span className="chip" key={`${description}-${index}`}>
+              {description}
+            </span>
+          ))}
+        </div>
+        <p className="menu">{menu}</p>
+        <p className="address">{address}</p>
+        <p className="openingHours">{hours}</p>
+      </Link>
     </article>
   );
 }

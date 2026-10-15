@@ -21,10 +21,13 @@ const RestaurantDetailsContainer = ({restaurants, pageId}: RestaurantDetailsCont
       : "";
 
   return (
-    <article className="details">
-      <Link className="details-back" to="/">
-        Alla restauranger
+    <>
+    <Link className="details-back" to="/">
+        ⟵ Alla restauranger
       </Link>
+      
+      <article className="details">
+      
       <h1>{currentRestaurant.name}</h1>
       <div className="details-chips">
         {currentRestaurant.descriptions.map((description, index) => (
@@ -40,6 +43,7 @@ const RestaurantDetailsContainer = ({restaurants, pageId}: RestaurantDetailsCont
         {` · ${currentRestaurant.totalTables} bord`}
       </p>
     </article>
+    </>
   );
 };
 

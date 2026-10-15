@@ -7,6 +7,9 @@
   align-items: center;
   gap: 16px 24px;
   padding: 16px 28px;
+  margin-top: 0,5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   background: color-mix(in srgb, var(--bg) 88%, white);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
@@ -32,10 +35,17 @@
   color: var(--ink);
 }
 
+button,
+input,
+select {
+  font: inherit;
+}
+
 @media (max-width: 860px) {
   .site-header {
     grid-template-columns: 1fr auto;
     padding: 16px;
+    
   }
 
   .logo {
