@@ -1,6 +1,5 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-
+import { Link, useParams } from "react-router-dom";
+import BookingForm from "../components/BookingForm";
 import "./RestaurantDetails.css";
 
 import { useRead } from "../hooks/useRead";
@@ -30,25 +29,44 @@ const RestaurantDetails = () => {
             : "";
 
         return (
-          <article className="details">
-            <Link className="details-back" to="/">
-              Alla restauranger
-            </Link>
-            <h1>{currentRestaurant.name}</h1>
-            <div className="details-chips">
-              {currentRestaurant.descriptions.map((description, index) => (
-                <span className="details-chip" key={`${description}-${index}`}>
-                  {description}
-                </span>
-              ))}
-            </div>
-            <p className="details-menu">{currentRestaurant.menu}</p>
-            <p className="details-meta">
-              {currentRestaurant.address}
-              {hours ? ` · ${hours}` : ""}
-              {` · ${currentRestaurant.totalTables} bord`}
-            </p>
-          </article>
+          <div className="details-page">
+            <article className="details">
+              <Link className="details-back" to="/">
+                Alla restauranger
+              </Link>
+              <h1>{currentRestaurant.name}</h1>
+              <div className="details-chips">
+                {currentRestaurant.descriptions.map((description, index) => (
+                  <span
+                    className="details-chip"
+                    key={`${description}-${index}`}
+                  >
+                    {description}
+                  </span>
+                ))}
+              </div>
+              <p className="details-menu">{currentRestaurant.menu}</p>
+              <p className="details-meta">
+                {currentRestaurant.address}
+                {hours ? ` · ${hours}` : ""}
+                {` · ${currentRestaurant.totalTables} bord`}
+              </p>
+              {currentRestaurant.image && (
+                <img
+                  className="details-photo"
+                  src={currentRestaurant.image}
+                  alt={currentRestaurant.name}
+                />
+              )}
+            </article>
+
+            <BookingForm
+              restaurantId={currentRestaurant.id}
+              restaurantName={currentRestaurant.name}
+              openTime={currentRestaurant.openTime}
+              sessionInterval={currentRestaurant.sessionInterval}
+            />
+          </div>
         );
       }}
     </DataBoundary>

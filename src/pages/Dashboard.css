@@ -4,14 +4,93 @@
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow);
-  max-width: 420px;
+  max-width: 720px;
 }
 
-.dashboard p {
-  margin: 0 0 16px;
+.dashboard h1 {
+  margin: 0 0 18px;
   font-family: Fraunces, Georgia, serif;
-  font-size: 2rem;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  line-height: 1.05;
   letter-spacing: -0.03em;
+}
+
+.dashboard-login,
+.dashboard-edit,
+.dashboard-heading {
+  display: grid;
+  gap: 14px;
+}
+
+.dashboard-heading {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.dashboard h2 {
+  margin: 22px 0 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+}
+
+.dashboard-login > p,
+.dashboard-heading p,
+.dashboard-status {
+  margin: 0;
+  color: var(--muted);
+}
+
+.dashboard-login label,
+.dashboard-edit label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.dashboard-login select,
+.dashboard-login input,
+.dashboard-edit input,
+.dashboard-edit textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--ink);
+}
+
+.dashboard-edit textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.dashboard-login select:focus-visible,
+.dashboard-login input:focus-visible,
+.dashboard-edit input:focus-visible,
+.dashboard-edit textarea:focus-visible {
+  outline: 3px solid rgba(156, 59, 40, 0.28);
+  border-color: var(--accent);
+}
+
+.dashboard-hours {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.dashboard-photo {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.dashboard-alert-ok {
+  background: var(--ok-bg);
+  color: var(--ok);
 }
 
 .dashboard-button {
@@ -31,4 +110,55 @@
 .dashboard-button:focus-visible {
   outline: 3px solid rgba(156, 59, 40, 0.35);
   outline-offset: 2px;
+}
+
+.dashboard-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.dashboard-logout {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.dashboard-logout:hover {
+  background: var(--accent);
+  color: #fffaf5;
+}
+
+.dashboard-bookings {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-bookings th,
+.dashboard-bookings td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.dashboard-bookings th {
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.dashboard-alert {
+  margin: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.dashboard-alert-error {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+@media (max-width: 640px) {
+  .dashboard-heading,
+  .dashboard-hours {
+    grid-template-columns: 1fr;
+  }
 }

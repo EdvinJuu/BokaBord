@@ -1,23 +1,29 @@
-
-export interface RestaurantProps{
-    id: number;
-    name: string;
-    address: string;
-    menu: string;
-    descriptions: string[]; // ["svensk mat", "familiärt", "bar"] Badge.tsx 
-    openTime: number[]; // Specifiera att endast två nummer får vara i listan
-    totalTables: number;
+export interface RestaurantProps {
+  id: number;
+  name: string;
+  address: string;
+  menu: string;
+  image: string;
+  descriptions: string[]; // ["svensk mat", "familiärt", "bar"] Badge.tsx
+  openTime: number[]; // Specifiera att endast två nummer får vara i listan
+  totalTables: number;
+  sessionInterval: number; // Hur många minuter en bokning gäller
 }
 
-export interface ReservationProps{
-    date: Date; // Osäkra om vi ska använda Date object eller bara string
-    partySize: number;
+export interface ReservationProps {
+  date: Date; // Osäkra om vi ska använda Date object eller bara string
+  partySize: number;
 }
 
-export interface UserProps{
-    name: string;
-    phoneNumber: string; // Kan göra om till object med country code + number
-    email: string;
+export interface UserProps {
+  name: string;
+  phoneNumber: string; // Kan göra om till object med country code + number
+  email: string;
 }
 
-
+export interface BookingFormProps {
+  restaurantId: number;
+  restaurantName: string;
+  sessionInterval: number;
+  openTime: number[];
+}
