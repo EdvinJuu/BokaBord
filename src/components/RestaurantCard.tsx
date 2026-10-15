@@ -14,7 +14,7 @@ export function RestaurantCard({
   menu,
   image,
   openTime,
-}: RestaurantProps) {
+}: Omit<RestaurantProps, "sessionInterval">) {
   if (!descriptions) return null;
 
   const hours =

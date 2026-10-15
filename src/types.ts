@@ -8,6 +8,7 @@ export interface RestaurantProps{
     descriptions: string[]; // ["svensk mat", "familiärt", "bar"] Badge.tsx 
     openTime: number[]; // Specifiera att endast två nummer får vara i listan
     totalTables: number;
+    sessionInterval: number; // Hur många minuter en bokning gäller
 }
 
 export interface ReservationProps{

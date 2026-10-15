@@ -1,3 +1,10 @@
+.details-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr);
+  gap: 28px;
+  align-items: start;
+}
+
 .details {
   background: var(--paper);
   border: 1px solid var(--line);
@@ -64,4 +71,114 @@
 
 .details-message {
   margin-bottom: 16px;
+}
+
+.booking {
+  position: sticky;
+  top: 92px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.booking h2 {
+  margin: 0 0 8px;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+}
+
+.booking > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.booking form {
+  display: grid;
+  gap: 14px;
+}
+
+.booking-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.booking label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.booking select,
+.booking input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--ink);
+}
+
+.booking select:focus-visible,
+.booking input:focus-visible {
+  outline: 3px solid rgba(156, 59, 40, 0.28);
+  border-color: var(--accent);
+}
+
+.booking button {
+  border: 0;
+  background: var(--accent);
+  color: #fffaf5;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.booking button:hover {
+  background: var(--accent-hover);
+}
+
+.booking button:focus-visible {
+  outline: 3px solid rgba(156, 59, 40, 0.35);
+  outline-offset: 2px;
+}
+
+.booking button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.details-page .alert {
+  margin: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.details-page .alert-ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.details-page .alert-error {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+@media (max-width: 860px) {
+  .details-page {
+    grid-template-columns: 1fr;
+  }
+
+  .booking {
+    position: static;
+  }
+
+  .booking-row {
+    grid-template-columns: 1fr;
+  }
 }

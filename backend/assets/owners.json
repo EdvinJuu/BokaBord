@@ -1,0 +1,11 @@
+[
+  { "restaurantId": 1, "password": "hornet-bord" },
+  { "restaurantId": 2, "password": "barnord-bord" },
+  { "restaurantId": 3, "password": "soderhavet-bord" },
+  { "restaurantId": 4, "password": "lillatorget-bord" },
+  { "restaurantId": 5, "password": "bjorkenskok-bord" },
+  { "restaurantId": 6, "password": "kajkanten-bord" },
+  { "restaurantId": 7, "password": "mormorskok-bord" },
+  { "restaurantId": 8, "password": "nattlampan-bord" },
+  { "restaurantId": 9, "password": "pingvin-bord" }
+]

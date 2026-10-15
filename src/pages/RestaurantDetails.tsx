@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import BookingForm from "../components/BookingForm";
 import type { RestaurantProps } from "../types";
 import "./RestaurantDetails.css";
 
@@ -65,32 +66,40 @@ const RestaurantDetails = () => {
       : "";
 
   return (
-    <article className="details">
-      <Link className="details-back" to="/">
-        Alla restauranger
-      </Link>
-      <h1>{restaurant.name}</h1>
-      <div className="details-chips">
-        {restaurant.descriptions.map((description, index) => (
-          <span className="details-chip" key={`${description}-${index}`}>
-            {description}
-          </span>
-        ))}
-      </div>
-      <p className="details-menu">{restaurant.menu}</p>
-      <p className="details-meta">
-        {restaurant.address}
-        {hours ? ` · ${hours}` : ""}
-        {` · ${restaurant.totalTables} bord`}
-      </p>
-      {restaurant.image && (
-        <img
-          className="details-photo"
-          src={restaurant.image}
-          alt={restaurant.name}
-        />
-      )}
-    </article>
+    <div className="details-page">
+      <article className="details">
+        <Link className="details-back" to="/">
+          Alla restauranger
+        </Link>
+        <h1>{restaurant.name}</h1>
+        <div className="details-chips">
+          {restaurant.descriptions.map((description, index) => (
+            <span className="details-chip" key={`${description}-${index}`}>
+              {description}
+            </span>
+          ))}
+        </div>
+        <p className="details-menu">{restaurant.menu}</p>
+        <p className="details-meta">
+          {restaurant.address}
+          {hours ? ` · ${hours}` : ""}
+          {` · ${restaurant.totalTables} bord`}
+        </p>
+        {restaurant.image && (
+          <img
+            className="details-photo"
+            src={restaurant.image}
+            alt={restaurant.name}
+          />
+        )}
+      </article>
+      <BookingForm
+        restaurantId={restaurant.id}
+        restaurantName={restaurant.name}
+        openTime={restaurant.openTime}
+        sessionInterval={restaurant.sessionInterval}
+      />
+    </div>
   );
 };
 

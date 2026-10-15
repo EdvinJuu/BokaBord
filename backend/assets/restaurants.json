@@ -5,9 +5,16 @@
     "address": "Götgatan 21, Stockholm",
     "menu": "Köttbullar, pytt i panna och vegetarisk wallenbergare",
     "image": "/api/pictures/1.jpg",
-    "descriptions": ["svensk mat", "familjärt"],
-    "openTime": [11, 22],
-    "totalTables": 16
+    "descriptions": [
+      "svensk mat",
+      "familjärt"
+    ],
+    "openTime": [
+      11,
+      22
+    ],
+    "totalTables": 16,
+    "sessionInterval": 60
   },
   {
     "id": 2,
@@ -15,9 +22,16 @@
     "address": "Norrlandsgatan 8, Stockholm",
     "menu": "Osträtter, tartar och säsongens drinkar",
     "image": "/api/pictures/2.jpg",
-    "descriptions": ["bar", "smårätter"],
-    "openTime": [16, 24],
-    "totalTables": 22
+    "descriptions": [
+      "bar",
+      "smårätter"
+    ],
+    "openTime": [
+      16,
+      24
+    ],
+    "totalTables": 22,
+    "sessionInterval": 30
   },
   {
     "id": 3,
@@ -25,9 +39,16 @@
     "address": "Hornsgatan 88, Stockholm",
     "menu": "Dagens fångst, musslor och fisksoppa",
     "image": "/api/pictures/3.jpg",
-    "descriptions": ["fisk", "skaldjur"],
-    "openTime": [12, 22],
-    "totalTables": 24
+    "descriptions": [
+      "fisk",
+      "skaldjur"
+    ],
+    "openTime": [
+      12,
+      22
+    ],
+    "totalTables": 24,
+    "sessionInterval": 30
   },
   {
     "id": 4,
@@ -35,9 +56,16 @@
     "address": "Stora Nygatan 4, Stockholm",
     "menu": "Dagens lunch, smörgåsar och fikabröd",
     "image": "/api/pictures/4.jpg",
-    "descriptions": ["lunch", "café"],
-    "openTime": [8, 16],
-    "totalTables": 12
+    "descriptions": [
+      "lunch",
+      "café"
+    ],
+    "openTime": [
+      8,
+      16
+    ],
+    "totalTables": 12,
+    "sessionInterval": 30
   },
   {
     "id": 5,
@@ -45,9 +73,16 @@
     "address": "Odengatan 45, Stockholm",
     "menu": "Vegetarisk avsmakning och säsongens grönsaker",
     "image": "/api/pictures/5.jpg",
-    "descriptions": ["vegetariskt", "säsong"],
-    "openTime": [17, 23],
-    "totalTables": 20
+    "descriptions": [
+      "vegetariskt",
+      "säsong"
+    ],
+    "openTime": [
+      17,
+      23
+    ],
+    "totalTables": 20,
+    "sessionInterval": 30
   },
   {
     "id": 6,
@@ -55,9 +90,16 @@
     "address": "Strandvägen 7, Stockholm",
     "menu": "Grillat, sallader och uteserveringens menyer",
     "image": "/api/pictures/6.jpg",
-    "descriptions": ["uteservering", "modernt"],
-    "openTime": [11, 23],
-    "totalTables": 30
+    "descriptions": [
+      "uteservering",
+      "modernt"
+    ],
+    "openTime": [
+      11,
+      23
+    ],
+    "totalTables": 30,
+    "sessionInterval": 30
   },
   {
     "id": 7,
@@ -65,9 +107,17 @@
     "address": "Folkungagatan 60, Stockholm",
     "menu": "Ärtsoppa, pannkakor och husmanskost",
     "image": "/api/pictures/7.jpg",
-    "descriptions": ["husmanskost", "familjärt", "kroppkakor"],
-    "openTime": [11, 21],
-    "totalTables": 14
+    "descriptions": [
+      "husmanskost",
+      "familjärt",
+      "kroppkakor"
+    ],
+    "openTime": [
+      11,
+      21
+    ],
+    "totalTables": 14,
+    "sessionInterval": 30
   },
   {
     "id": 8,
@@ -75,9 +125,16 @@
     "address": "Bondegatan 31, Stockholm",
     "menu": "Kvällens små rätter och vinpaket",
     "image": "/api/pictures/8.jpg",
-    "descriptions": ["bar", "kväll"],
-    "openTime": [17, 24],
-    "totalTables": 10
+    "descriptions": [
+      "bar",
+      "kväll"
+    ],
+    "openTime": [
+      17,
+      24
+    ],
+    "totalTables": 10,
+    "sessionInterval": 30
   },
   {
     "id": 9,
@@ -85,8 +142,15 @@
     "address": "Norra Drottninggatan 16, Uddevalla",
     "menu": "Pizza, Kebab och sånt",
     "image": "/api/pictures/9.jpg",
-    "descriptions": ["pizzeria", "nästan alltid"],
-    "openTime": [11, 22],
-    "totalTables": 10
+    "descriptions": [
+      "pizzeria",
+      "nästan alltid"
+    ],
+    "openTime": [
+      11,
+      22
+    ],
+    "totalTables": 10,
+    "sessionInterval": 30
   }
 ]
