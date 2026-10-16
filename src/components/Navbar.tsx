@@ -9,9 +9,6 @@ export function Navbar() {
         BokaBord
       </Link>
       <SearchBar />
-      <Link className="nav-link" to="/Dashboard">
-        Mina Sidor
-      </Link>
     </header>
   );
 }
