@@ -11,7 +11,7 @@ export interface RestaurantProps {
 }
 
 export interface ReservationProps {
-  date: Date; // Osäkra om vi ska använda Date object eller bara string
+  date: Date;
   partySize: number;
 }
 
@@ -21,9 +21,8 @@ export interface UserProps {
   email: string;
 }
 
-export interface BookingFormProps {
-  restaurantId: number;
-  restaurantName: string;
-  sessionInterval: number;
-  openTime: number[];
-}
+// En type som plockar ut urvalda props från RestaurantProps
+export type BookingFormRestaurant = Pick<
+  RestaurantProps,
+  "id" | "name" | "sessionInterval" | "openTime"
+>;

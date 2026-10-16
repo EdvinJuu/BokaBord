@@ -57,7 +57,7 @@ function getAvailableDates(daysAhead: number) {
     );
   }
 
-  return dates; // Se till att vi får en lista med Dates istället för strings
+  return dates;
 }
 
 function BookingForm({
@@ -88,8 +88,6 @@ function BookingForm({
     availableTimes.includes(time) &&
     availablePartySizes.includes(partySize) &&
     isContact(contact);
-
-
 
   function handleChange(setter: (value: string) => void) {
     return (e: ChangeEvent<HTMLSelectElement>) => {

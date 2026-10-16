@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import "./RestaurantDetails.css";
 
-import { useRead } from "../hooks/useRead";
+import { useRead } from "../hooks/useReadRestaurants";
 import DataBoundary from "../components/DataBoundary";
 
 const RestaurantDetails = () => {

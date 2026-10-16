@@ -2,11 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import type { RestaurantProps } from "../types";
 
-
-
 export const useRead = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [restaurants, setRestaurants] = useState<RestaurantProps[] | null>(null);
+  const [restaurants, setRestaurants] = useState<RestaurantProps[] | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,9 +14,10 @@ export const useRead = () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get<RestaurantProps[]>("http://localhost:5001/api/restaurants")
-        const data = await response.data
-        setRestaurants(data);
+        const response = await axios.get<RestaurantProps[]>(
+          "http://localhost:5001/api/restaurants",
+        );
+        setRestaurants(response.data);
       } catch (error) {
         console.error(error);
         setError("Could not load restaurants. Is the backend running?");
@@ -24,8 +25,8 @@ export const useRead = () => {
         setIsLoading(false);
       }
     };
-    
-    loadTasks()
+
+    loadTasks();
   }, []);
   return { restaurants, error, isLoading };
-}
+};

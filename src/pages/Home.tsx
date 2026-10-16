@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import RestaurantList from "../components/RestaurantList";
 import type { RestaurantProps } from "../types";
-import { useRead } from "../hooks/useRead";
+import { useRead } from "../hooks/useReadRestaurants";
 import DataBoundary from "../components/DataBoundary";
 
 function Home() {
