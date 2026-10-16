@@ -9,7 +9,7 @@ export const reformulateDate = (date: Date, dateType: string) => {
 
   if (dateType === "getDate") {
     //  kör numret genom våran addZero funktion utifall om minuterna från vårat Date objekt är mindre än 10 (så typ "13:9" istället för "13:09")
-    return `${date.getFullYear()}-${addZero(date.getMonth())}-${addZero(date.getDate())}`;
+    return `${date.getFullYear()}-${addZero(date.getMonth() + 1)}-${addZero(date.getDate())}`; // La till + 1 på month då januari i js är 0
   }
   if (dateType === "getTime") {
     
