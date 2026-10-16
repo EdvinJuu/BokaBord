@@ -1,0 +1,3 @@
+{
+  "ignore": ["assets/bookings/**", "assets/Pictures/**", "assets/restaurants.json"]
+}

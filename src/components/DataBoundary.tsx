@@ -20,7 +20,7 @@ function DataBoundary<T>({
     return <p>{error}</p>;
   }
   if (data === null) {
-    return null;
+    return <p>No data available.</p>;
   }
   return <>{children(data)}</>;
 }
