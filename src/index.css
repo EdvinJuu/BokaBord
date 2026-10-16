@@ -1,49 +1,59 @@
+
 :root {
-  --bg: #f4efe6;
-  --paper: #fbf7f0;
-  --ink: #1f1a16;
-  --muted: #6b5f55;
-  --line: #d8cfc2;
-  --accent: #9c3b28;
-  --accent-hover: #7e2e1f;
-  --chip: #efe6d8;
-  --ok: #2f6b4f;
-  --ok-bg: #e7f3ec;
-  --danger: #9c3b28;
-  --danger-bg: #f8e8e4;
-  --shadow: 0 18px 40px rgba(31, 26, 22, 0.08);
-  --radius: 22px;
+  /* Huvud Färger */
+  --background-primary: #f4efe6; /* bakgrund färg till hela hemsidan*/
+  --background-secondary: #fbf7f0; /* bakgrund färg till kort */
+  --text-primary: #1f1a16; /* Text till rubriker, och beskrivningar */
+  --text-muted: #6b5f55; /* Färg på text som är "sekundär", bland annat adresser och öppetider, även till länkar(andvänd då --text-primary som hover) så som "Alla Restauranger" och "Admin". Kan också användas som hover på restaurangkorten i home :)  */
+  --border: #d8cfc2; /* Border till kort och inputs */
+  --button-primary: #9c3b28; /* bakgrund till knappar*/
+  --button-hover: #7e2e1f; /*Hover till knappar*/
+  --chip: #efe6d8; /* Bakgrund till "chips", små rutor, i vårt fall inne i restaurangkorten där det står "svenskt" "lunchkafe" */
+
+  /*Skugga, radius, margin, border*/
+  --shadow: 0 18px 40px rgba(31, 26, 22, 0.08); /* Skugga som ska ligga på kort, bland annat restaurangkort*/
+  --radius: 22px; /*Border radius för alla kort*/
+  --card-padding: 24px; /*Padding som ska ligga på alla kort, restaurant card, bookingform, dashboard*/
+  --border-size: 1px; /*Alla borders tjocklek*/
+  
+
+  /* För alerts och meddelanden */
+  --ok: #2f6b4f; /*Färg på text vid godkänd fröfrågan, exempelvis alerten som dyker upp när din bokningsförfrågan skickas*/
+  --ok-bg: #e7f3ec; /* Bakgrund färg till text vid godkänd förfrågan */
+  --danger: #9c3b28; /*Färg på text vid nekad förfrågan, exempelvis alerten som dyker upp när din bokningsförfråga nekas*/
+  --danger-bg: #f8e8e4; /* Bakgrund färg till text vid nekad förfrågan */
+  
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
+/*Sätter bakgrunden på hela hemsidan och ger all brödtext samma typsnitt. samt ger ett speciellt avstånd vid varje textrad inom korten*/
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
+  background: var(--background-primary);
   font-family: Outfit, system-ui, sans-serif;
-  font-size: 16px;
   line-height: 1.5;
 }
 
-#root {
-  min-height: 100vh;
+/*Gör alla h2 till denna stylingen*/
+h2 {
+  margin: 8px 0px 8px 0px;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
 }
 
+/*Gör att restaurangkorten inte får blå text*/
 a {
   color: inherit;
 }
 
-
-
+/*!margin till restaurangkorten i home behöver ändras så att alla layouts har samma avstånd till navbaren, tror det ska lösa sig med 
+/*! margin: 0rem 1rem 1rem 1rem;*/
+/*Gör att main har samma avstånd från alla sidor på alla layouts.*/
 main {
   width: min(1120px, calc(100% - 40px));
   margin: 28px auto 80px;
 }
 
+/*Responsivitet som jag inte rört för jag ser att det ligger restaurantlist.css*/
 @media (max-width: 860px) {
   main {
     width: min(1120px, calc(100% - 32px));

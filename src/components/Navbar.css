@@ -10,9 +10,9 @@
   margin-top: 0,5rem;
   margin-left: 2rem;
   margin-right: 2rem;
-  background: color-mix(in srgb, var(--bg) 88%, white);
+  background: color-mix(in srgb, var(--background-primary) 88%, white);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .logo {
@@ -25,14 +25,14 @@
 
 .nav-link {
   text-decoration: none;
-  color: var(--muted);
+  color: var(--text-muted);
   font-weight: 500;
   white-space: nowrap;
 }
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 button,

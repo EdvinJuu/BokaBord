@@ -26,8 +26,8 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px 24px;
   box-shadow: var(--shadow);
@@ -62,7 +62,7 @@
 
 .restaurant-card h2 a:hover,
 .restaurant-card h2 a:focus-visible {
-  color: var(--accent);
+  color: var(--button-primary);
 }
 
 .chips {
@@ -86,21 +86,21 @@
 
 .restaurant-card .address {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .status {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .spinner {
   width: 1rem;
   height: 1rem;
-  border: 2px solid var(--line);
-  border-top-color: var(--accent);
+  border: 2px solid var(--border);
+  border-top-color: var(--button-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
