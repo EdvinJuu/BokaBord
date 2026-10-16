@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import type { RestaurantProps } from "../types";
+import api from "../services/api";
 
 export const useRead = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,8 +14,8 @@ export const useRead = () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get<RestaurantProps[]>(
-          "http://localhost:5001/api/restaurants",
+        const response = await api.get<RestaurantProps[]>(
+          "/restaurants",
         );
         setRestaurants(response.data);
       } catch (error) {
