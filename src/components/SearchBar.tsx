@@ -49,6 +49,7 @@ export function SearchBar() {
             type="search"
             placeholder="Sök restaurang, beskrivning etc..."
             aria-label="Sök restaurang"
+            value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
@@ -59,6 +60,7 @@ export function SearchBar() {
             return <SearchField
               restaurants={currentRestaurants}
               searchInput={searchInput}
+              setSearchInput={setSearchInput}
             />;
           }}
         </DataBoundary>}

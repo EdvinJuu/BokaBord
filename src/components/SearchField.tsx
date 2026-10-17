@@ -1,13 +1,16 @@
+
 import type { RestaurantProps } from "../types";
 import { RestaurantSearchCard } from "./RestaurantSearchCard";
+import "./SearchField.css";
 
 interface SearchFieldProps {
   restaurants: RestaurantProps[];
   searchInput: string;
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SearchField = ({ restaurants, searchInput }: SearchFieldProps) => {
- 
+const SearchField = ({ restaurants, searchInput, setSearchInput }: SearchFieldProps) => {
+
     const searchInputFilter = searchInput.trim().toLowerCase();
 
     const filteredRestaurants = restaurants.filter(
@@ -23,14 +26,8 @@ const SearchField = ({ restaurants, searchInput }: SearchFieldProps) => {
       {filteredRestaurants.map((restaurant) => (
         <li key={restaurant.id}>
           <RestaurantSearchCard
-            id={restaurant.id}
-            name={restaurant.name}
-            address={restaurant.address}
-            descriptions={restaurant.descriptions}
-            menu={restaurant.menu}
-            image={restaurant.image}
-            openTime={restaurant.openTime}
-            totalTables={restaurant.totalTables}
+            {...restaurant} // Det är samma sak som att skriva alla props som ligger under RestaurantSearchCard
+            setSearchInput={setSearchInput}
           />
         </li>
       ))}

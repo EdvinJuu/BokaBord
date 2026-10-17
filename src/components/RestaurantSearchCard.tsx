@@ -3,19 +3,28 @@ import { Link } from "react-router-dom";
 import type { RestaurantProps } from "../types";
 import "./RestaurantCard.css";
 
+    interface restaurantSearchCardProps extends RestaurantProps {
+        setSearchInput:React.Dispatch<React.SetStateAction<string>>;
+    }
+
 export function RestaurantSearchCard({
   id,
   name,
   descriptions,
   menu,
-}: Omit<RestaurantProps, "sessionInterval">) {
+  setSearchInput,
+}: restaurantSearchCardProps) {
   if (!descriptions) return null;
 
+    function handleLinkOnClick(e: React.MouseEvent) {
+        e.stopPropagation();
+        setSearchInput("");
 
+    }
 
   return (
     <article className="restaurant-card">
-      <Link to={`/restaurant/${id}`}>
+      <Link onClick={handleLinkOnClick} to={`/restaurant/${id}`}>
         <h2>{name}</h2>
         <div className="chips">
           {descriptions.map((description, index) => (
