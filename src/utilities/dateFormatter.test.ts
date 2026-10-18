@@ -1,4 +1,4 @@
-import { describe, it, expect} from "vitest";
+import { describe, it, expect} from "@jest/globals";
 import { reformulateDate } from "./dateFormatter";
 
 // describe talar om vilken funktion vi testar. Fungerar som "mapp" till alla tester vi utför på funktionen.
