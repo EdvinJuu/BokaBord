@@ -17,7 +17,7 @@ const app = express()
 
 // Define the port number where the server 
 // will listen for incoming requests
- PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 5001
 
 const serverDir = dirname(fileURLToPath(import.meta.url));
 
