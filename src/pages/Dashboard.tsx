@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import type { RestaurantProps } from "../types";
 import "./Dashboard.css";
+import api, { resolveApiUrl } from "../services/api";
 
 const sessionKey = "bokabord-owner-session";
 
@@ -109,8 +110,8 @@ function Dashboard() {
 
     let ignore = false;
 
-    axios
-      .get<OwnerBooking[]>(`/api/restaurants/${session.restaurantId}/bookings`, {
+    api
+      .get<OwnerBooking[]>(`/restaurants/${session.restaurantId}/bookings`, {
         headers: { Authorization: `Bearer ${session.token}` },
       })
       .then((response) => {
@@ -173,10 +174,10 @@ function Dashboard() {
     setLoggingIn(true);
 
     try {
-      const response = await axios.post<{
+      const response = await api.post<{
         token: string;
         restaurant: { id: number; name: string };
-      }>("/api/sessions", {
+      }>("/sessions", {
         restaurantId: Number(restaurantId),
         password,
       });
@@ -207,7 +208,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      await axios.delete("/api/sessions", {
+      await api.delete("/sessions", {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch {
@@ -263,8 +264,8 @@ function Dashboard() {
 
     try {
       const image = imageFile ? await fileToDataUrl(imageFile) : undefined;
-      const response = await axios.put<RestaurantProps>(
-        `/api/restaurants/${session.restaurantId}`,
+      const response = await api.put<RestaurantProps>(
+        `/restaurants/${session.restaurantId}`,
         {
           name: draft.name,
           address: draft.address,
@@ -334,7 +335,7 @@ function Dashboard() {
             <form className="dashboard-edit" onSubmit={handleSaveRestaurant}>
               <img
                 className="dashboard-photo"
-                src={imagePreview || restaurant?.image}
+                src={imagePreview || resolveApiUrl(restaurant?.image ?? "")}
                 alt={draft.name}
               />
               <label>

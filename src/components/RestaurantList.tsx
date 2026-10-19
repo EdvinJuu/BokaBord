@@ -21,6 +21,7 @@ function RestaurantList({ restaurants }: RestaurantListProps) {
             image={restaurant.image}
             openTime={restaurant.openTime}
             totalTables={restaurant.totalTables}
+            sessionInterval={restaurant.sessionInterval}
           />
         </li>
       ))}

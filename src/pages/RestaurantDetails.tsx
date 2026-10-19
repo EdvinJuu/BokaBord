@@ -4,6 +4,7 @@ import "./RestaurantDetails.css";
 
 import { useRead } from "../hooks/useReadRestaurants";
 import DataBoundary from "../components/DataBoundary";
+import { resolveApiUrl } from "../services/api";
 
 const RestaurantDetails = () => {
   const { id } = useParams();
@@ -54,7 +55,7 @@ const RestaurantDetails = () => {
               {currentRestaurant.image && (
                 <img
                   className="details-photo"
-                  src={currentRestaurant.image}
+                  src={resolveApiUrl(currentRestaurant.image)}
                   alt={currentRestaurant.name}
                 />
               )}

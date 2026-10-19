@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import api from "../services/api";
 
 /*
   Det här är bokningsformuläret på restaurangsidan. RestaurantDetails
@@ -240,7 +241,7 @@ function BookingForm({
     setStatus("sending");
 
     try {
-      await axios.post(`/api/restaurants/${restaurantId}/bookings`, {
+      await api.post(`/restaurants/${restaurantId}/bookings`, {
         date: toDateKey(date),
         time,
         partySize: Number(partySize),

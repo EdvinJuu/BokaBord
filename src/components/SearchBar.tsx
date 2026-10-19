@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./SearchBar.css";
 import { useRead } from "../hooks/useReadRestaurants";
-import type { RestaurantProps } from "../types";
 import SearchField from "./SearchField";
 import DataBoundary from "./DataBoundary";
 
