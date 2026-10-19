@@ -6,8 +6,8 @@
 }
 
 .details {
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow);
@@ -24,14 +24,14 @@
 .details-back {
   display: inline-block;
   margin-bottom: 16px;
-  color: var(--muted);
+  color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
 }
 
 .details-back:hover,
 .details-back:focus-visible {
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 .details-chips {
@@ -56,7 +56,7 @@
 .details-meta,
 .details-message {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .details-photo {
@@ -76,8 +76,8 @@
 .booking {
   position: sticky;
   top: 92px;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow);
@@ -92,7 +92,7 @@
 
 .booking > p {
   margin: 0 0 18px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .booking form {
@@ -116,22 +116,22 @@
 .booking select,
 .booking input {
   width: 100%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border);
   background: #fff;
   border-radius: 12px;
   padding: 12px;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 .booking select:focus-visible,
 .booking input:focus-visible {
   outline: 3px solid rgba(156, 59, 40, 0.28);
-  border-color: var(--accent);
+  border-color: var(--button-primary);
 }
 
 .booking button {
   border: 0;
-  background: var(--accent);
+  background: var(--button-primary);
   color: #fffaf5;
   border-radius: 14px;
   padding: 14px 16px;
@@ -140,7 +140,7 @@
 }
 
 .booking button:hover {
-  background: var(--accent-hover);
+  background: var(--button-hover);
 }
 
 .booking button:focus-visible {
