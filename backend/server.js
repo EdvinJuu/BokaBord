@@ -17,7 +17,7 @@ const app = express()
 
 // Define the port number where the server 
 // will listen for incoming requests
-const PORT = process.env.PORT || 5001
+const PORT = 5001; // 5001
 
 const serverDir = dirname(fileURLToPath(import.meta.url));
 
@@ -136,15 +136,15 @@ async function writeBookings(id, bookings) {
     await writeFile(bookingFilePath(id), `${JSON.stringify(bookings, null, 2)}\n`, 'utf8');
 }
 
-async function readOwners() {
+async function readAdmin() {
     const raw = await readFile(ownersPath, 'utf8');
-    const owners = JSON.parse(raw);
+    const admin = JSON.parse(raw);
 
-    if (!Array.isArray(owners)) {
-        throw new Error('Kunde inte läsa innehavare');
+    if (!admin || typeof admin.username !== 'string' || typeof admin.password !== 'string') {
+        throw new Error('Kunde inte läsa admin');
     }
 
-    return owners;
+    return admin;
 }
 
 function passwordsMatch(stored, given) {
@@ -161,9 +161,9 @@ function bearerToken(req) {
     return header.slice('Bearer '.length).trim();
 }
 
-function ownerSession(req, restaurantId) {
+function adminSession(req) {
     const session = ownerSessions.get(bearerToken(req));
-    if (!session || session.restaurantId !== restaurantId) return null;
+    if (!session?.admin) return null;
     return session;
 }
 
@@ -360,7 +360,7 @@ app.put('/api/restaurants/:id', async (req, res) => {
         return res.status(400).json({ error: 'Ogiltigt id' });
     }
 
-    if (!ownerSession(req, id)) {
+    if (!adminSession(req)) {
         return res.status(401).json({ error: 'Logga in för att ändra restaurangen' });
     }
 
@@ -417,29 +417,24 @@ app.put('/api/restaurants/:id', async (req, res) => {
 });
 
 app.post('/api/sessions', async (req, res) => {
-    const restaurantId = Number(req.body?.restaurantId);
+    const username = typeof req.body?.username === 'string' ? req.body.username.trim() : '';
     const password = req.body?.password;
 
-    if (!Number.isInteger(restaurantId) || typeof password !== 'string' || !password) {
-        return res.status(400).json({ error: 'Välj restaurang och lösenord' });
+    if (!username || typeof password !== 'string' || !password) {
+        return res.status(400).json({ error: 'Ange användarnamn och lösenord' });
     }
 
     try {
-        const [restaurants, owners] = await Promise.all([readRestaurants(), readOwners()]);
-        const restaurant = restaurants.find((item) => item.id === restaurantId);
-        const owner = owners.find((item) => item.restaurantId === restaurantId);
+        const admin = await readAdmin();
 
-        if (!restaurant || !owner || !passwordsMatch(owner.password, password)) {
-            return res.status(401).json({ error: 'Fel restaurang eller lösenord' });
+        if (admin.username !== username || !passwordsMatch(admin.password, password)) {
+            return res.status(401).json({ error: 'Fel användarnamn eller lösenord' });
         }
 
         const token = randomBytes(32).toString('hex');
-        ownerSessions.set(token, { restaurantId });
+        ownerSessions.set(token, { admin: true, username: admin.username });
 
-        res.status(201).json({
-            token,
-            restaurant: { id: restaurant.id, name: restaurant.name },
-        });
+        res.status(201).json({ token, username: admin.username });
     } catch {
         res.status(500).json({ error: 'Kunde inte logga in' });
     }
@@ -451,6 +446,32 @@ app.delete('/api/sessions', (req, res) => {
     res.status(204).end();
 });
 
+app.get('/api/bookings', async (req, res) => {
+    if (!adminSession(req)) {
+        return res.status(401).json({ error: 'Logga in för att se bokningar' });
+    }
+
+    try {
+        const restaurants = await readRestaurants();
+        const bookings = [];
+
+        for (const restaurant of restaurants) {
+            const restaurantBookings = await readBookings(restaurant.id);
+            for (const booking of restaurantBookings) {
+                bookings.push({
+                    restaurantId: restaurant.id,
+                    restaurantName: restaurant.name,
+                    ...booking,
+                });
+            }
+        }
+
+        res.status(200).json(bookings);
+    } catch {
+        res.status(500).json({ error: 'Kunde inte läsa bokningar' });
+    }
+});
+
 app.get('/api/restaurants/:id/bookings', async (req, res) => {
     const id = Number(req.params.id);
 
@@ -458,7 +479,7 @@ app.get('/api/restaurants/:id/bookings', async (req, res) => {
         return res.status(400).json({ error: 'Ogiltigt id' });
     }
 
-    if (!ownerSession(req, id)) {
+    if (!adminSession(req)) {
         return res.status(401).json({ error: 'Logga in för att se bokningar' });
     }
 

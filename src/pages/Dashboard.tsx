@@ -1,18 +1,18 @@
 import axios from "axios";
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import type { RestaurantProps } from "../types";
+import { useEffect, useState, type FormEvent } from "react";
 import "./Dashboard.css";
-import api, { resolveApiUrl } from "../services/api";
+import api from "../services/api";
 
-const sessionKey = "bokabord-owner-session";
+const sessionKey = "bokabord-admin-session";
 
-interface OwnerSession {
+interface AdminSession {
   token: string;
-  restaurantId: number;
-  restaurantName: string;
+  username: string;
 }
 
-interface OwnerBooking {
+interface AdminBooking {
+  restaurantId: number;
+  restaurantName: string;
   date: string;
   time: string;
   partySize: number;
@@ -20,49 +20,14 @@ interface OwnerBooking {
   sessionInterval?: number;
 }
 
-interface RestaurantDraft {
-  name: string;
-  address: string;
-  menu: string;
-  descriptions: string;
-  opens: string;
-  closes: string;
-  totalTables: string;
-  sessionInterval: string;
-}
-
-function draftFromRestaurant(restaurant: RestaurantProps): RestaurantDraft {
-  return {
-    name: restaurant.name,
-    address: restaurant.address,
-    menu: restaurant.menu,
-    descriptions: restaurant.descriptions.join(", "),
-    opens: String(restaurant.openTime[0] ?? ""),
-    closes: String(restaurant.openTime[1] ?? ""),
-    totalTables: String(restaurant.totalTables),
-    sessionInterval: String(restaurant.sessionInterval),
-  };
-}
-
-function fileToDataUrl(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-function readSession(): OwnerSession | null {
+function readSession(): AdminSession | null {
   const raw = sessionStorage.getItem(sessionKey);
 
   if (!raw) return null;
 
   try {
-    const parsed = JSON.parse(raw) as OwnerSession;
-    if (!parsed.token || !Number.isInteger(parsed.restaurantId) || !parsed.restaurantName) {
-      return null;
-    }
+    const parsed = JSON.parse(raw) as AdminSession;
+    if (!parsed.token || !parsed.username) return null;
     return parsed;
   } catch {
     return null;
@@ -70,40 +35,13 @@ function readSession(): OwnerSession | null {
 }
 
 function Dashboard() {
-  const [session, setSession] = useState<OwnerSession | null>(readSession);
-  const [restaurants, setRestaurants] = useState<RestaurantProps[] | null>(null);
-  const [restaurantId, setRestaurantId] = useState("");
+  const [session, setSession] = useState<AdminSession | null>(readSession);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loggingIn, setLoggingIn] = useState(false);
-  const [bookings, setBookings] = useState<OwnerBooking[] | null>(null);
+  const [bookings, setBookings] = useState<AdminBooking[] | null>(null);
   const [bookingsError, setBookingsError] = useState<string | null>(null);
-  const [restaurant, setRestaurant] = useState<RestaurantProps | null>(null);
-  const [draft, setDraft] = useState<RestaurantDraft | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState("");
-  const [savingRestaurant, setSavingRestaurant] = useState(false);
-  const [restaurantMessage, setRestaurantMessage] = useState<string | null>(null);
-  const [restaurantError, setRestaurantError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (session) return;
-
-    let ignore = false;
-
-    axios
-      .get<RestaurantProps[]>("/api/restaurants")
-      .then((response) => {
-        if (!ignore) setRestaurants(response.data);
-      })
-      .catch(() => {
-        if (!ignore) setLoginError("Kunde inte hämta restauranger");
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [session]);
 
   useEffect(() => {
     if (!session) return;
@@ -111,7 +49,7 @@ function Dashboard() {
     let ignore = false;
 
     api
-      .get<OwnerBooking[]>(`/restaurants/${session.restaurantId}/bookings`, {
+      .get<AdminBooking[]>("/bookings", {
         headers: { Authorization: `Bearer ${session.token}` },
       })
       .then((response) => {
@@ -133,66 +71,35 @@ function Dashboard() {
     };
   }, [session]);
 
-  useEffect(() => {
-    if (!session) return;
-
-    let ignore = false;
-
-    axios
-      .get<RestaurantProps>(`/api/restaurants/${session.restaurantId}`)
-      .then((response) => {
-        if (ignore) return;
-        setRestaurant(response.data);
-        setDraft(draftFromRestaurant(response.data));
-      })
-      .catch(() => {
-        if (!ignore) setRestaurantError("Kunde inte hämta restaurangen");
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [session]);
-
-  function clearOwnerState() {
-    setBookings(null);
-    setBookingsError(null);
-    setRestaurant(null);
-    setDraft(null);
-    setImageFile(null);
-    setImagePreview((current) => {
-      if (current.startsWith("blob:")) URL.revokeObjectURL(current);
-      return "";
-    });
-    setRestaurantMessage(null);
-    setRestaurantError(null);
-  }
-
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoginError(null);
     setLoggingIn(true);
 
     try {
-      const response = await api.post<{
-        token: string;
-        restaurant: { id: number; name: string };
-      }>("/sessions", {
-        restaurantId: Number(restaurantId),
-        password,
-      });
+      const response = await axios.post<{ token: string; username: string }>(
+        "/api/sessions",
+        {
+          username: username.trim(),
+          password,
+        },
+      );
       const nextSession = {
         token: response.data.token,
-        restaurantId: response.data.restaurant.id,
-        restaurantName: response.data.restaurant.name,
+        username: response.data.username,
       };
       sessionStorage.setItem(sessionKey, JSON.stringify(nextSession));
       setPassword("");
-      clearOwnerState();
+      setBookings(null);
+      setBookingsError(null);
       setSession(nextSession);
     } catch (error) {
-      const message = axios.isAxiosError(error) ? error.response?.data?.error : null;
-      setLoginError(typeof message === "string" ? message : "Kunde inte logga in");
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.error
+        : null;
+      setLoginError(
+        typeof message === "string" ? message : "Kunde inte logga in",
+      );
     } finally {
       setLoggingIn(false);
     }
@@ -202,113 +109,27 @@ function Dashboard() {
     const token = session?.token;
     sessionStorage.removeItem(sessionKey);
     setSession(null);
-    clearOwnerState();
+    setBookings(null);
+    setBookingsError(null);
     setPassword("");
 
     if (!token) return;
 
     try {
-      await api.delete("/sessions", {
+      await axios.delete("/api/sessions", {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch {
-      // The local session is already gone. A failed revoke still logs the owner out here.
-    }
-  }
-
-  function updateDraft(field: keyof RestaurantDraft, value: string) {
-    setRestaurantMessage(null);
-    setRestaurantError(null);
-    setDraft((current) => (current ? { ...current, [field]: value } : current));
-  }
-
-  function handleImage(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0] ?? null;
-    setRestaurantMessage(null);
-    setRestaurantError(null);
-
-    if (file && (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5_000_000)) {
-      setImageFile(null);
-      setRestaurantError("Bilden måste vara jpg, png eller webp och högst 5 MB");
-      return;
-    }
-
-    setImageFile(file);
-    setImagePreview((current) => {
-      if (current.startsWith("blob:")) URL.revokeObjectURL(current);
-      return file ? URL.createObjectURL(file) : "";
-    });
-  }
-
-  async function handleSaveRestaurant(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!session || !draft) return;
-
-    const descriptions = draft.descriptions
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-    const opens = Number(draft.opens);
-    const closes = Number(draft.closes);
-    const totalTables = Number(draft.totalTables);
-    const sessionInterval = Number(draft.sessionInterval);
-
-    if (!draft.name.trim() || !draft.address.trim() || !draft.menu.trim() || descriptions.length === 0) {
-      setRestaurantError("Fyll i namn, adress, meny och minst en beskrivning");
-      return;
-    }
-
-    setSavingRestaurant(true);
-    setRestaurantMessage(null);
-    setRestaurantError(null);
-
-    try {
-      const image = imageFile ? await fileToDataUrl(imageFile) : undefined;
-      const response = await api.put<RestaurantProps>(
-        `/restaurants/${session.restaurantId}`,
-        {
-          name: draft.name,
-          address: draft.address,
-          menu: draft.menu,
-          descriptions,
-          openTime: [opens, closes],
-          totalTables,
-          sessionInterval,
-          ...(image ? { image } : {}),
-        },
-        { headers: { Authorization: `Bearer ${session.token}` } },
-      );
-      const saved = response.data;
-      const nextSession = { ...session, restaurantName: saved.name };
-      sessionStorage.setItem(sessionKey, JSON.stringify(nextSession));
-      setSession(nextSession);
-      setRestaurant(saved);
-      setDraft(draftFromRestaurant(saved));
-      setImageFile(null);
-      setImagePreview((current) => {
-        if (current.startsWith("blob:")) URL.revokeObjectURL(current);
-        return "";
-      });
-      setRestaurantMessage("Uppgifterna är sparade");
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        sessionStorage.removeItem(sessionKey);
-        setSession(null);
-        clearOwnerState();
-        setLoginError("Logga in igen");
-        return;
-      }
-      const message = axios.isAxiosError(error) ? error.response?.data?.error : null;
-      setRestaurantError(typeof message === "string" ? message : "Kunde inte spara restaurangen");
-    } finally {
-      setSavingRestaurant(false);
+      // Utloggningen här är redan gjord. Ett misslyckat anrop till servern ändrar inte det.
     }
   }
 
   const rows = bookings
     ? [...bookings].sort(
         (left, right) =>
-          left.date.localeCompare(right.date) || left.time.localeCompare(right.time),
+          left.restaurantName.localeCompare(right.restaurantName, "sv") ||
+          left.date.localeCompare(right.date) ||
+          left.time.localeCompare(right.time),
       )
     : [];
 
@@ -318,120 +139,15 @@ function Dashboard() {
       {session ? (
         <>
           <div className="dashboard-heading">
-            <p>
-              Bokningar för <strong>{session.restaurantName}</strong>
-            </p>
-            <button type="button" className="dashboard-button dashboard-logout" onClick={handleLogout}>
+            <p>Alla bokningar</p>
+            <button
+              type="button"
+              className="dashboard-button dashboard-logout"
+              onClick={handleLogout}
+            >
               Logga ut
             </button>
           </div>
-          <h2>Uppgifter</h2>
-          {!draft && !restaurantError && (
-            <p className="dashboard-status" role="status">
-              Hämtar restaurangen...
-            </p>
-          )}
-          {draft && (
-            <form className="dashboard-edit" onSubmit={handleSaveRestaurant}>
-              <img
-                className="dashboard-photo"
-                src={imagePreview || resolveApiUrl(restaurant?.image ?? "")}
-                alt={draft.name}
-              />
-              <label>
-                Bild
-                <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImage} />
-              </label>
-              <label>
-                Namn
-                <input value={draft.name} onChange={(event) => updateDraft("name", event.target.value)} required />
-              </label>
-              <label>
-                Adress
-                <input
-                  value={draft.address}
-                  onChange={(event) => updateDraft("address", event.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Meny
-                <textarea
-                  value={draft.menu}
-                  onChange={(event) => updateDraft("menu", event.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Beskrivningar, separera med kommatecken
-                <input
-                  value={draft.descriptions}
-                  onChange={(event) => updateDraft("descriptions", event.target.value)}
-                  required
-                />
-              </label>
-              <div className="dashboard-hours">
-                <label>
-                  Öppnar
-                  <input
-                    type="number"
-                    min={0}
-                    max={23}
-                    value={draft.opens}
-                    onChange={(event) => updateDraft("opens", event.target.value)}
-                    required
-                  />
-                </label>
-                <label>
-                  Stänger
-                  <input
-                    type="number"
-                    min={1}
-                    max={24}
-                    value={draft.closes}
-                    onChange={(event) => updateDraft("closes", event.target.value)}
-                    required
-                  />
-                </label>
-              </div>
-              <label>
-                Antal bord
-                <input
-                  type="number"
-                  min={1}
-                  max={200}
-                  value={draft.totalTables}
-                  onChange={(event) => updateDraft("totalTables", event.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Bokningen gäller (minuter)
-                <input
-                  type="number"
-                  min={15}
-                  max={240}
-                  value={draft.sessionInterval}
-                  onChange={(event) => updateDraft("sessionInterval", event.target.value)}
-                  required
-                />
-              </label>
-              <button type="submit" className="dashboard-button" disabled={savingRestaurant}>
-                {savingRestaurant ? "Sparar..." : "Spara uppgifter"}
-              </button>
-              {restaurantMessage && (
-                <p className="dashboard-alert dashboard-alert-ok" role="status">
-                  {restaurantMessage}
-                </p>
-              )}
-              {restaurantError && (
-                <p className="dashboard-alert dashboard-alert-error" role="alert">
-                  {restaurantError}
-                </p>
-              )}
-            </form>
-          )}
-          <h2>Bokningar</h2>
           {bookings === null && !bookingsError && (
             <p className="dashboard-status" role="status">
               Hämtar bokningar...
@@ -449,6 +165,7 @@ function Dashboard() {
             <table className="dashboard-bookings">
               <thead>
                 <tr>
+                  <th>Restaurang</th>
                   <th>Datum</th>
                   <th>Tid</th>
                   <th>Gäster</th>
@@ -458,12 +175,19 @@ function Dashboard() {
               </thead>
               <tbody>
                 {rows.map((booking, index) => (
-                  <tr key={`${booking.date}-${booking.time}-${booking.partySize}-${booking.contact ?? ""}-${index}`}>
+                  <tr
+                    key={`${booking.restaurantId}-${booking.date}-${booking.time}-${booking.partySize}-${booking.contact ?? ""}-${index}`}
+                  >
+                    <td>{booking.restaurantName}</td>
                     <td>{booking.date}</td>
                     <td>{booking.time}</td>
                     <td>{booking.partySize}</td>
                     <td>{booking.contact || "—"}</td>
-                    <td>{booking.sessionInterval ? `${booking.sessionInterval} min` : "—"}</td>
+                    <td>
+                      {booking.sessionInterval
+                        ? `${booking.sessionInterval} min`
+                        : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -472,23 +196,16 @@ function Dashboard() {
         </>
       ) : (
         <form className="dashboard-login" onSubmit={handleLogin}>
-          <p>Logga in som innehavare för att se restaurangens bokningar.</p>
+          <p>Logga in för att se alla restaurangers bokningar.</p>
           <label>
-            Restaurang
-            <select
-              value={restaurantId}
-              onChange={(event) => setRestaurantId(event.target.value)}
+            Användarnamn
+            <input
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              autoComplete="username"
               required
-            >
-              <option value="" disabled>
-                Välj restaurang
-              </option>
-              {restaurants?.map((restaurant) => (
-                <option key={restaurant.id} value={restaurant.id}>
-                  {restaurant.name}
-                </option>
-              ))}
-            </select>
+            />
           </label>
           <label>
             Lösenord
@@ -500,7 +217,11 @@ function Dashboard() {
               required
             />
           </label>
-          <button type="submit" className="dashboard-button" disabled={loggingIn || !restaurants}>
+          <button
+            type="submit"
+            className="dashboard-button"
+            disabled={loggingIn}
+          >
             {loggingIn ? "Loggar in..." : "Logga in"}
           </button>
           {loginError && (
