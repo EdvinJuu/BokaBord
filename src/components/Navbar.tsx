@@ -10,7 +10,7 @@ export function Navbar() {
       </Link>
       <SearchBar />
       <Link className="nav-link" to="/dashboard">
-        ASDASD
+        Admin 
       </Link>
     </header>
   );
