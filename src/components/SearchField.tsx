@@ -21,7 +21,7 @@ const SearchField = ({ restaurants, searchInput, setSearchInput }: SearchFieldPr
 
   return (
     
-    <ul className="restaurant-list-container">
+    <ul className="search-restaurant-list-container">
       {filteredRestaurants.map((restaurant) => (
         <li key={restaurant.id}>
           <RestaurantSearchCard

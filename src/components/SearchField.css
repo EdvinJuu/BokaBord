@@ -1,0 +1,7 @@
+.search-restaurant-list-container {
+  position: absolute;
+  overflow-y: scroll;
+  max-height: 100vh;
+  background-color: white;
+  border-radius: var(--radius);
+}
