@@ -183,7 +183,7 @@ app.use('/api/pictures', express.static(picturesPath));
 // Use Express's built-in middleware to automatically parse 
 // incoming HTTP requests that contain JSON data 
 // (this makes req.body available in our routes)
-app.use(express.json({ limit: '8mb' }));
+app.use(express.json());
 
 
 // Initialize a temporary in-memory "database" 
