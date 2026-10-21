@@ -78,7 +78,7 @@ function Dashboard() {
 
     try {
       const response = await api.post<{ token: string; username: string }>(
-        "/api/sessions",
+        "/sessions",
         {
           username: username.trim(),
           password,
@@ -116,7 +116,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      await api.delete("/api/sessions", {
+      await api.delete("/sessions", {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch {
