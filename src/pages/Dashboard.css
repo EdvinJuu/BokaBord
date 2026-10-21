@@ -5,6 +5,7 @@
   padding: 24px;
   box-shadow: var(--shadow);
   max-width: 720px;
+  margin: 0 auto;
 }
 
 .dashboard h1 {
@@ -54,11 +55,12 @@
 .dashboard-login input,
 .dashboard-edit input,
 .dashboard-edit textarea {
+  box-sizing: border-box;
   width: 100%;
   border: 1px solid var(--border);
-  background: #fff;
-  border-radius: 12px;
-  padding: 12px;
+  background: var(--chip);
+  border-radius: var(--radius);
+  padding: 1rem;
   color: var(--text-primary);
 }
 
@@ -97,7 +99,7 @@
   border: 0;
   background: var(--button-primary);
   color: #fffaf5;
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 12px 16px;
   font-weight: 600;
   cursor: pointer;

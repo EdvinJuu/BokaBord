@@ -134,6 +134,7 @@ function Dashboard() {
     : [];
 
   return (
+    <main>
     <article className="dashboard">
       <h1>Mina sidor</h1>
       {session ? (
@@ -232,6 +233,7 @@ function Dashboard() {
         </form>
       )}
     </article>
+    </main>
   );
 }
 

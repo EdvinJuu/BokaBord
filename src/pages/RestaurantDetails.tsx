@@ -14,6 +14,7 @@ const RestaurantDetails = () => {
   if (!id) return <p>Restaurant was not found.</p>; // BYT UT MOT RIKTIG ERROR HANDLING
 
   return (
+    <main>
     <DataBoundary data={restaurants} isLoading={isLoading} error={error}>
       {(currentRestaurants) => {
         const currentRestaurant = currentRestaurants.find(
@@ -75,6 +76,7 @@ const RestaurantDetails = () => {
         );
       }}
     </DataBoundary>
+    </main>
   );
 };
 
