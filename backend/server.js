@@ -1,7 +1,7 @@
 // Import the Express framework, to simplifies building 
 // web servers and APIs in Node.js
 import { randomBytes, timingSafeEqual } from 'node:crypto';
-import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
@@ -32,7 +32,6 @@ const ownersPath = join(serverDir, 'assets/owners.json');
 
 const bookingWrites = new Map();
 const ownerSessions = new Map();
-let restaurantWrite = Promise.resolve();
 
 async function readRestaurants() {
     const raw = await readFile(restaurantsPath, 'utf8');
@@ -135,11 +134,33 @@ async function writeBookings(id, bookings) {
     await writeFile(bookingFilePath(id), `${JSON.stringify(bookings, null, 2)}\n`, 'utf8');
 }
 
+function queueBookingWrite(id, task) {
+    const previous = bookingWrites.get(id) ?? Promise.resolve();
+    const current = previous.catch(() => {}).then(task);
+    bookingWrites.set(
+        id,
+        current.then(
+            () => {},
+            () => {},
+        ),
+    );
+    return current;
+}
+
 async function readOwners() {
     const raw = await readFile(ownersPath, 'utf8');
-    const owners = JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    const owners = Array.isArray(parsed) ? parsed : [parsed];
 
-    if (!Array.isArray(owners)) {
+    const valid = owners.length > 0 && owners.every((item) => (
+        item &&
+        typeof item.username === 'string' &&
+        typeof item.password === 'string' &&
+        item.username &&
+        item.password
+    ));
+
+    if (!valid) {
         throw new Error('Kunde inte läsa innehavare');
     }
 
@@ -158,134 +179,6 @@ function bearerToken(req) {
     const header = req.get('authorization') ?? '';
     if (!header.startsWith('Bearer ')) return '';
     return header.slice('Bearer '.length).trim();
-}
-
-function ownerSession(req, restaurantId) {
-    const session = ownerSessions.get(bearerToken(req));
-    if (!session || session.restaurantId !== restaurantId) return null;
-    return session;
-}
-
-function queueRestaurantWrite(task) {
-    const current = restaurantWrite.catch(() => {}).then(task);
-    restaurantWrite = current.then(
-        () => {},
-        () => {},
-    );
-    return current;
-}
-
-function cleanText(value, max) {
-    if (typeof value !== 'string') return null;
-    const text = value.trim();
-    if (!text || text.length > max) return null;
-    return text;
-}
-
-function decodeImage(value) {
-    if (typeof value !== 'string') return null;
-
-    const match = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=\r\n]+)$/.exec(value);
-    if (!match) return null;
-
-    const buffer = Buffer.from(match[2], 'base64');
-    if (buffer.length < 32 || buffer.length > 5_000_000) return null;
-
-    if (match[1] === 'jpeg' && buffer.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) {
-        return { ext: 'jpg', buffer };
-    }
-
-    if (
-        match[1] === 'png' &&
-        buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
-    ) {
-        return { ext: 'png', buffer };
-    }
-
-    if (
-        match[1] === 'webp' &&
-        buffer.subarray(0, 4).toString('ascii') === 'RIFF' &&
-        buffer.subarray(8, 12).toString('ascii') === 'WEBP'
-    ) {
-        return { ext: 'webp', buffer };
-    }
-
-    return null;
-}
-
-function pictureFileName(imagePath, id) {
-    const name = String(imagePath).split('?')[0].split('/').pop() ?? '';
-    if (name === `${id}.jpg` || name === `${id}.png` || name === `${id}.webp`) return name;
-    return '';
-}
-
-function parseRestaurantUpdate(body) {
-    const name = cleanText(body?.name, 80);
-    const address = cleanText(body?.address, 160);
-    const menu = cleanText(body?.menu, 500);
-
-    if (!name || !address || !menu) {
-        return { error: 'Fyll i namn, adress och meny' };
-    }
-
-    if (!Array.isArray(body?.descriptions) || body.descriptions.length < 1 || body.descriptions.length > 8) {
-        return { error: 'Ange minst en beskrivning' };
-    }
-
-    const descriptions = [];
-    for (const item of body.descriptions) {
-        const text = cleanText(item, 40);
-        if (!text) return { error: 'Ange minst en beskrivning' };
-        descriptions.push(text);
-    }
-
-    const openTime = body?.openTime;
-    if (
-        !Array.isArray(openTime) ||
-        openTime.length !== 2 ||
-        !Number.isInteger(openTime[0]) ||
-        !Number.isInteger(openTime[1]) ||
-        openTime[0] < 0 ||
-        openTime[0] > 23 ||
-        openTime[1] < 1 ||
-        openTime[1] > 24 ||
-        openTime[0] >= openTime[1]
-    ) {
-        return { error: 'Ange öppettider med två klockslag' };
-    }
-
-    const totalTables = body?.totalTables;
-    if (!Number.isInteger(totalTables) || totalTables < 1 || totalTables > 200) {
-        return { error: 'Ange antal bord' };
-    }
-
-    const sessionInterval = body?.sessionInterval;
-    if (!Number.isInteger(sessionInterval) || sessionInterval < 15 || sessionInterval > 240) {
-        return { error: 'Ange hur många minuter en bokning gäller' };
-    }
-
-    let image = null;
-    if (body?.image != null && body.image !== '') {
-        image = decodeImage(body.image);
-        if (!image) return { error: 'Bilden måste vara jpg, png eller webp' };
-    }
-
-    return {
-        value: { name, address, menu, descriptions, openTime, totalTables, sessionInterval, image },
-    };
-}
-
-function queueBookingWrite(id, task) {
-    const previous = bookingWrites.get(id) ?? Promise.resolve();
-    const current = previous.catch(() => {}).then(task);
-    bookingWrites.set(
-        id,
-        current.then(
-            () => {},
-            () => {},
-        ),
-    );
-    return current;
 }
 
 // Enable CORS for all incoming requests. This prevents browser 
@@ -352,129 +245,6 @@ app.get('/api/restaurants/:id', async (req, res) => {
     }
 });
 
-app.put('/api/restaurants/:id', async (req, res) => {
-    const id = Number(req.params.id);
-
-    if (!Number.isInteger(id)) {
-        return res.status(400).json({ error: 'Ogiltigt id' });
-    }
-
-    if (!ownerSession(req, id)) {
-        return res.status(401).json({ error: 'Logga in för att ändra restaurangen' });
-    }
-
-    const parsed = parseRestaurantUpdate(req.body);
-    if (parsed.error) {
-        return res.status(400).json({ error: parsed.error });
-    }
-
-    try {
-        const updated = await queueRestaurantWrite(async () => {
-            const restaurants = await readRestaurants();
-            const index = restaurants.findIndex((item) => item.id === id);
-            if (index === -1) return null;
-
-            const current = restaurants[index];
-            let image = current.image;
-
-            if (parsed.value.image) {
-                const filename = `${id}.${parsed.value.image.ext}`;
-                await writeFile(join(picturesPath, filename), parsed.value.image.buffer);
-                image = `/api/pictures/${filename}?v=${Date.now()}`;
-                const previous = pictureFileName(current.image, id);
-                if (previous && previous !== filename) {
-                    await unlink(join(picturesPath, previous)).catch((error) => {
-                        if (error.code !== 'ENOENT') throw error;
-                    });
-                }
-            }
-
-            const next = {
-                id: current.id,
-                name: parsed.value.name,
-                address: parsed.value.address,
-                menu: parsed.value.menu,
-                image,
-                descriptions: parsed.value.descriptions,
-                openTime: parsed.value.openTime,
-                totalTables: parsed.value.totalTables,
-                sessionInterval: parsed.value.sessionInterval,
-            };
-            restaurants[index] = next;
-            await writeFile(restaurantsPath, `${JSON.stringify(restaurants, null, 2)}\n`, 'utf8');
-            return next;
-        });
-
-        if (!updated) {
-            return res.status(404).json({ error: 'Restaurangen finns inte' });
-        }
-
-        res.status(200).json(updated);
-    } catch {
-        res.status(500).json({ error: 'Kunde inte spara restaurangen' });
-    }
-});
-
-app.post('/api/sessions', async (req, res) => {
-    const restaurantId = Number(req.body?.restaurantId);
-    const password = req.body?.password;
-
-    if (!Number.isInteger(restaurantId) || typeof password !== 'string' || !password) {
-        return res.status(400).json({ error: 'Välj restaurang och lösenord' });
-    }
-
-    try {
-        const [restaurants, owners] = await Promise.all([readRestaurants(), readOwners()]);
-        const restaurant = restaurants.find((item) => item.id === restaurantId);
-        const owner = owners.find((item) => item.restaurantId === restaurantId);
-
-        if (!restaurant || !owner || !passwordsMatch(owner.password, password)) {
-            return res.status(401).json({ error: 'Fel restaurang eller lösenord' });
-        }
-
-        const token = randomBytes(32).toString('hex');
-        ownerSessions.set(token, { restaurantId });
-
-        res.status(201).json({
-            token,
-            restaurant: { id: restaurant.id, name: restaurant.name },
-        });
-    } catch {
-        res.status(500).json({ error: 'Kunde inte logga in' });
-    }
-});
-
-app.delete('/api/sessions', (req, res) => {
-    const token = bearerToken(req);
-    if (token) ownerSessions.delete(token);
-    res.status(204).end();
-});
-
-app.get('/api/restaurants/:id/bookings', async (req, res) => {
-    const id = Number(req.params.id);
-
-    if (!Number.isInteger(id)) {
-        return res.status(400).json({ error: 'Ogiltigt id' });
-    }
-
-    if (!ownerSession(req, id)) {
-        return res.status(401).json({ error: 'Logga in för att se bokningar' });
-    }
-
-    try {
-        const restaurants = await readRestaurants();
-
-        if (!restaurants.some((item) => item.id === id)) {
-            return res.status(404).json({ error: 'Restaurangen finns inte' });
-        }
-
-        const bookings = await readBookings(id);
-        res.status(200).json(bookings);
-    } catch {
-        res.status(500).json({ error: 'Kunde inte läsa bokningar' });
-    }
-});
-
 app.post('/api/restaurants/:id/bookings', async (req, res) => {
     const id = Number(req.params.id);
     const { date, time, partySize, contact } = req.body ?? {};
@@ -524,6 +294,60 @@ app.post('/api/restaurants/:id/bookings', async (req, res) => {
     } catch {
         res.status(500).json({ error: 'Kunde inte spara bokningen' });
     }
+});
+
+app.post('/api/sessions', async (req, res) => {
+    const username = req.body?.username;
+    const password = req.body?.password;
+
+    if (typeof username !== 'string' || typeof password !== 'string' || !username || !password) {
+        return res.status(400).json({ error: 'Ange användarnamn och lösenord' });
+    }
+
+    try {
+        const owners = await readOwners();
+        const owner = owners.find((item) => item.username === username);
+
+        if (!owner || !passwordsMatch(owner.password, password)) {
+            return res.status(401).json({ error: 'Fel användarnamn eller lösenord' });
+        }
+
+        const token = randomBytes(32).toString('hex');
+        ownerSessions.set(token, { username: owner.username });
+
+        res.status(201).json({ token, username: owner.username });
+    } catch {
+        res.status(500).json({ error: 'Kunde inte logga in' });
+    }
+});
+
+app.get('/api/bookings', async (req, res) => {
+    if (!ownerSessions.has(bearerToken(req))) {
+        return res.status(401).json({ error: 'Logga in för att se bokningar' });
+    }
+
+    try {
+        const restaurants = await readRestaurants();
+        const all = await Promise.all(
+            restaurants.map(async (restaurant) => {
+                const bookings = await readBookings(restaurant.id);
+                return bookings.map((booking) => ({
+                    ...booking,
+                    restaurantId: restaurant.id,
+                    restaurantName: restaurant.name,
+                }));
+            }),
+        );
+        res.status(200).json(all.flat());
+    } catch {
+        res.status(500).json({ error: 'Kunde inte läsa bokningar' });
+    }
+});
+
+app.delete('/api/sessions', (req, res) => {
+    const token = bearerToken(req);
+    if (token) ownerSessions.delete(token);
+    res.status(204).end();
 });
 
 // Define a GET route to retrieve the entire list of tasks.

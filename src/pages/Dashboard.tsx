@@ -54,7 +54,7 @@ function Dashboard() {
       })
       .then((response) => {
         if (!ignore) setBookings(response.data);
-      })
+      }) 
       .catch((error) => {
         if (ignore) return;
         if (axios.isAxiosError(error) && error.response?.status === 401) {
