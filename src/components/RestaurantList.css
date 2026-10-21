@@ -2,8 +2,6 @@
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   justify-content: center;  
-  margin-top: 0;
-  margin-right: 2rem;
 }
 
 @media (min-width: 640px) {
@@ -16,6 +14,5 @@
 @media (min-width: 1024px) {
   .restaurant-list-container {
     grid-template-columns: repeat(3, 1fr);
-     margin-right: 6.5rem;
   }
 }
