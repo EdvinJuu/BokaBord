@@ -77,8 +77,8 @@ function Dashboard() {
     setLoggingIn(true);
 
     try {
-      const response = await axios.post<{ token: string; username: string }>(
-        "/api/sessions",
+      const response = await api.post<{ token: string; username: string }>(
+        "/sessions",
         {
           username: username.trim(),
           password,
@@ -116,7 +116,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      await axios.delete("/api/sessions", {
+      await api.delete("/sessions", {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch {
