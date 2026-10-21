@@ -1,17 +1,18 @@
 import axios from "axios";
 import { useEffect, useState, type FormEvent } from "react";
-import type { RestaurantProps } from "../types";
 import "./Dashboard.css";
+import api from "../services/api";
 
-const sessionKey = "bokabord-owner-session";
+const sessionKey = "bokabord-admin-session";
 
-interface OwnerSession {
+interface AdminSession {
   token: string;
-  restaurantId: number;
-  restaurantName: string;
+  username: string;
 }
 
-interface OwnerBooking {
+interface AdminBooking {
+  restaurantId: number;
+  restaurantName: string;
   date: string;
   time: string;
   partySize: number;
@@ -19,16 +20,14 @@ interface OwnerBooking {
   sessionInterval?: number;
 }
 
-function readSession(): OwnerSession | null {
+function readSession(): AdminSession | null {
   const raw = sessionStorage.getItem(sessionKey);
 
   if (!raw) return null;
 
   try {
-    const parsed = JSON.parse(raw) as OwnerSession;
-    if (!parsed.token || !Number.isInteger(parsed.restaurantId) || !parsed.restaurantName) {
-      return null;
-    }
+    const parsed = JSON.parse(raw) as AdminSession;
+    if (!parsed.token || !parsed.username) return null;
     return parsed;
   } catch {
     return null;
@@ -36,41 +35,21 @@ function readSession(): OwnerSession | null {
 }
 
 function Dashboard() {
-  const [session, setSession] = useState<OwnerSession | null>(readSession);
-  const [restaurants, setRestaurants] = useState<RestaurantProps[] | null>(null);
-  const [restaurantId, setRestaurantId] = useState("");
+  const [session, setSession] = useState<AdminSession | null>(readSession);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loggingIn, setLoggingIn] = useState(false);
-  const [bookings, setBookings] = useState<OwnerBooking[] | null>(null);
+  const [bookings, setBookings] = useState<AdminBooking[] | null>(null);
   const [bookingsError, setBookingsError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (session) return;
-
-    let ignore = false;
-
-    axios
-      .get<RestaurantProps[]>("/api/restaurants")
-      .then((response) => {
-        if (!ignore) setRestaurants(response.data);
-      })
-      .catch(() => {
-        if (!ignore) setLoginError("Kunde inte hämta restauranger");
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [session]);
 
   useEffect(() => {
     if (!session) return;
 
     let ignore = false;
 
-    axios
-      .get<OwnerBooking[]>(`/api/restaurants/${session.restaurantId}/bookings`, {
+    api
+      .get<AdminBooking[]>("/bookings", {
         headers: { Authorization: `Bearer ${session.token}` },
       })
       .then((response) => {
@@ -98,17 +77,16 @@ function Dashboard() {
     setLoggingIn(true);
 
     try {
-      const response = await axios.post<{
-        token: string;
-        restaurant: { id: number; name: string };
-      }>("/api/sessions", {
-        restaurantId: Number(restaurantId),
-        password,
-      });
+      const response = await axios.post<{ token: string; username: string }>(
+        "/api/sessions",
+        {
+          username: username.trim(),
+          password,
+        },
+      );
       const nextSession = {
         token: response.data.token,
-        restaurantId: response.data.restaurant.id,
-        restaurantName: response.data.restaurant.name,
+        username: response.data.username,
       };
       sessionStorage.setItem(sessionKey, JSON.stringify(nextSession));
       setPassword("");
@@ -116,8 +94,12 @@ function Dashboard() {
       setBookingsError(null);
       setSession(nextSession);
     } catch (error) {
-      const message = axios.isAxiosError(error) ? error.response?.data?.error : null;
-      setLoginError(typeof message === "string" ? message : "Kunde inte logga in");
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.error
+        : null;
+      setLoginError(
+        typeof message === "string" ? message : "Kunde inte logga in",
+      );
     } finally {
       setLoggingIn(false);
     }
@@ -145,7 +127,9 @@ function Dashboard() {
   const rows = bookings
     ? [...bookings].sort(
         (left, right) =>
-          left.date.localeCompare(right.date) || left.time.localeCompare(right.time),
+          left.restaurantName.localeCompare(right.restaurantName, "sv") ||
+          left.date.localeCompare(right.date) ||
+          left.time.localeCompare(right.time),
       )
     : [];
 
@@ -155,14 +139,15 @@ function Dashboard() {
       {session ? (
         <>
           <div className="dashboard-heading">
-            <p>
-              Bokningar för <strong>{session.restaurantName}</strong>
-            </p>
-            <button type="button" className="dashboard-button dashboard-logout" onClick={handleLogout}>
+            <p>Alla bokningar</p>
+            <button
+              type="button"
+              className="dashboard-button dashboard-logout"
+              onClick={handleLogout}
+            >
               Logga ut
             </button>
           </div>
-          <h2>Bokningar</h2>
           {bookings === null && !bookingsError && (
             <p className="dashboard-status" role="status">
               Hämtar bokningar...
@@ -173,11 +158,14 @@ function Dashboard() {
               {bookingsError}
             </p>
           )}
-          {bookings && rows.length === 0 && <p className="dashboard-status">Inga bokningar ännu.</p>}
+          {bookings && rows.length === 0 && (
+            <p className="dashboard-status">Inga bokningar ännu.</p>
+          )}
           {rows.length > 0 && (
             <table className="dashboard-bookings">
               <thead>
                 <tr>
+                  <th>Restaurang</th>
                   <th>Datum</th>
                   <th>Tid</th>
                   <th>Gäster</th>
@@ -187,12 +175,19 @@ function Dashboard() {
               </thead>
               <tbody>
                 {rows.map((booking, index) => (
-                  <tr key={`${booking.date}-${booking.time}-${booking.partySize}-${booking.contact ?? ""}-${index}`}>
+                  <tr
+                    key={`${booking.restaurantId}-${booking.date}-${booking.time}-${booking.partySize}-${booking.contact ?? ""}-${index}`}
+                  >
+                    <td>{booking.restaurantName}</td>
                     <td>{booking.date}</td>
                     <td>{booking.time}</td>
                     <td>{booking.partySize}</td>
                     <td>{booking.contact || "—"}</td>
-                    <td>{booking.sessionInterval ? `${booking.sessionInterval} min` : "—"}</td>
+                    <td>
+                      {booking.sessionInterval
+                        ? `${booking.sessionInterval} min`
+                        : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -201,28 +196,16 @@ function Dashboard() {
         </>
       ) : (
         <form className="dashboard-login" onSubmit={handleLogin}>
-          <p>Logga in som innehavare för att se restaurangens bokningar.</p>
-          {restaurants === null && !loginError && (
-            <p className="dashboard-status" role="status">
-              Hämtar restauranger...
-            </p>
-          )}
+          <p>Logga in för att se alla restaurangers bokningar.</p>
           <label>
-            Restaurang
-            <select
-              value={restaurantId}
-              onChange={(event) => setRestaurantId(event.target.value)}
+            Användarnamn
+            <input
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              autoComplete="username"
               required
-            >
-              <option value="" disabled>
-                Välj restaurang
-              </option>
-              {restaurants?.map((restaurant) => (
-                <option key={restaurant.id} value={restaurant.id}>
-                  {restaurant.name}
-                </option>
-              ))}
-            </select>
+            />
           </label>
           <label>
             Lösenord
@@ -234,7 +217,11 @@ function Dashboard() {
               required
             />
           </label>
-          <button type="submit" className="dashboard-button" disabled={loggingIn || !restaurants}>
+          <button
+            type="submit"
+            className="dashboard-button"
+            disabled={loggingIn}
+          >
             {loggingIn ? "Loggar in..." : "Logga in"}
           </button>
           {loginError && (
