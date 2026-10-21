@@ -1,7 +1,6 @@
 
 import type { RestaurantProps } from "../types";
 import { RestaurantSearchCard } from "./RestaurantSearchCard";
-import "./SearchField.css";
 
 interface SearchFieldProps {
   restaurants: RestaurantProps[];
