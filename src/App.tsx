@@ -8,13 +8,11 @@ function App() {
   return (
     <>
       <Navbar />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/restaurant/:id" element={<RestaurantDetails/>} />
-          <Route path="/Dashboard" element={<Dashboard/>}/>
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/restaurant/:id" element={<RestaurantDetails />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </>
   );
 }
