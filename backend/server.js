@@ -149,9 +149,18 @@ function queueBookingWrite(id, task) {
 
 async function readOwners() {
     const raw = await readFile(ownersPath, 'utf8');
-    const owners = JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    const owners = Array.isArray(parsed) ? parsed : [parsed];
 
-    if (!Array.isArray(owners)) {
+    const valid = owners.length > 0 && owners.every((item) => (
+        item &&
+        typeof item.username === 'string' &&
+        typeof item.password === 'string' &&
+        item.username &&
+        item.password
+    ));
+
+    if (!valid) {
         throw new Error('Kunde inte läsa innehavare');
     }
 
