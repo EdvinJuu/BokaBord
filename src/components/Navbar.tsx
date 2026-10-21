@@ -8,8 +8,10 @@ export function Navbar() {
       <Link className="logo" to="/">
         BokaBord
       </Link>
-      <SearchBar /><Link to="/dashboard">
-      ASDASD</Link>
+      <SearchBar />
+      <Link className="nav-link" to="/dashboard">
+        ASDASD
+      </Link>
     </header>
   );
 }

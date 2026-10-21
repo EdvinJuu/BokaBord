@@ -1,41 +1,58 @@
 .booking {
-}
-
-.booking h2 {
+  position: sticky;
+  top: 5.75rem;
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
 }
 
 .booking > p {
+  margin: 0 0 0.5rem;
+  color: var(--text-muted);
 }
 
 .booking form {
+  display: grid;
+  gap: 1rem;
 }
 
 .booking-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .booking label {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  font-weight: 600;
 }
 
-.booking select {
-}
-
-.booking select:focus {
+.booking select,
+.booking input {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  border-radius: var(--radius);
+  padding: 1rem;
+  color: var(--text-primary);
 }
 
 .booking button {
+  border: 0;
+  background: var(--button-primary);
+  color: #fffaf5;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .booking button:hover {
+  background: var(--button-hover);
 }
 
-.booking button:active {
-}
-
-.alert {
-}
-
-.alert-ok {
-}
-
-.alert-error {
-}

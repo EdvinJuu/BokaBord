@@ -5,12 +5,10 @@
   display: grid;
   grid-template-columns: auto minmax(160px, 1fr) auto;
   align-items: center;
-  gap: 16px 24px;
-  padding: 16px 28px;
+  gap: 1rem 1.5rem;
+  padding: 1rem 1.5rem;
   margin-top: 0,5rem;
-  margin-left: 2rem;
-  margin-right: 2rem;
-  background: color-mix(in srgb, var(--background-primary) 88%, white);
+  background: var(--background-primary);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -41,10 +39,10 @@ select {
   font: inherit;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1020px) {
   .site-header {
     grid-template-columns: 1fr auto;
-    padding: 16px;
+    padding: 1rem;
     
   }
 

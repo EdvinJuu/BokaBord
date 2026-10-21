@@ -30,11 +30,13 @@ const RestaurantDetails = () => {
             : "";
 
         return (
-          <div className="details-page">
+          <>
+          <Link className="details-back" to="/">
+             ← Alla restauranger
+            </Link>
+            <div className="details-page">
+            
             <article className="details">
-              <Link className="details-back" to="/">
-                Alla restauranger
-              </Link>
               <h1>{currentRestaurant.name}</h1>
               <div className="details-chips">
                 {currentRestaurant.descriptions.map((description, index) => (
@@ -60,6 +62,7 @@ const RestaurantDetails = () => {
                 />
               )}
             </article>
+            
 
             <BookingForm
               restaurantId={currentRestaurant.id}
@@ -68,6 +71,7 @@ const RestaurantDetails = () => {
               sessionInterval={currentRestaurant.sessionInterval}
             />
           </div>
+          </>
         );
       }}
     </DataBoundary>

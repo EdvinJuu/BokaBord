@@ -1,3 +1,4 @@
+import "./BookingForm.css"
 import axios from "axios";
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import api from "../services/api";
@@ -272,8 +273,7 @@ function BookingForm({
     <aside className="booking" id={`booking-${restaurantId}`}>
       <h2>Boka bord</h2>
       <p>
-        Välj tid och antal gäster hos {restaurantName}. En bokning gäller i {sessionInterval}{" "}
-        minuter.
+        Välj tid och antal gäster hos {restaurantName}. 
       </p>
       <form onSubmit={handleSubmit}>
         <div className="booking-row">

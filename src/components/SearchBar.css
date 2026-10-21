@@ -6,16 +6,16 @@
 .search-box {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 8px 16px;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
 }
 
 .search-box:focus-within {
-  border-color: color-mix(in srgb, var(--button-primary) 55%, var(--border));
-  box-shadow: 0 0 0 4px rgba(156, 59, 40, 0.12);
+  border-color: var(--button-primary);
+  box-shadow: var(--shadow);
 }
 
 .search-box svg {
@@ -27,7 +27,7 @@
   width: 100%;
   border: 0;
   background: transparent;
-  padding: 6px 0;
+  padding: 0.5rem 0;
   color: var(--text-primary);
   outline: none;
 }
