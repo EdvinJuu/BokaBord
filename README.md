@@ -55,3 +55,18 @@ Våra huvudsakliga designmål är att skapa ett gränssnitt som är:
 - Konsekvent – med en enhetlig stil i hela applikationen.
 - Tydligt – med begripliga meddelanden och återkoppling.
 - Lätt att underhålla – genom en strukturerad uppdelning av CSS-stylingen.
+
+
+Testning
+
+I de tester vi utfört så använder vi oss av Jest. Testerna kontrollerar att datum och klockslag formateras korrekt, samt att inledande nollor läggs till när det behövs. exempelvis att dag 5 blir 05 och att klockan 09:05 inte blir 9:5. På så sätt kan vi kontrollera att funktionen ger rätt restultat för olika datum och tider. 
+
+
+Validering
+
+Vi har arbetat med validering både i frontend och backend för att säkerställa att bokningarna blir korrekta. Själva bokningsformuläret begränsar användaren till förvalda datum, tider och antal personer.
+- Användaren kan bara välja datum som stäcker sig 14 dagar framöver.
+- Användaren kan bara välja förbestämda tider, som även ligger inom restaurangens öppetider.
+- Användaren kan bara boka för 1 till 8 personer.
+
+Backend kontrollerar bland annat att restaurangen finns, att datum och tid har rätt format, att antalet gäster är mellan 1 och 8 samt att gästen fyllt i en godkännd kontaktuppgift. Vi har även lagt till en kontroll som förhindrar att fler bokningar görs vid samma tid än vad restaurangens kapacitet tillåter.
