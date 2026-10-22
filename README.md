@@ -28,3 +28,30 @@ npm run dev
 ```
 
 Appen öppnas på http://localhost:5173. Anrop till `/api` skickas vidare till backend på port 5001, så båda servrarna behöver köra.
+
+
+UI/UX
+Design och struktur
+Varje komponent har en CSS-fil och det finns en 
+index.css för globala stilar.
+Det gör koden enklare att underhålla och gör det lättare att ändra enskilda komponenters utseende samt säkerställer en konsekvent design i hela applikationen.
+
+Användarvänlighet
+Gränssnittet är utformat för att göra det enkelt för användaren att navigera i applikationen och genomföra en bokning.
+
+Vi har fokuserat på:
+- Igenkänning: En enhetlig design gör gränssnittet lättare att förstå och använda.
+- Tydlighet: Meddelanden hjälper användaren att förstå resultatet av sina handlingar och uppmärksammar eventuella fel.
+- Enkel navigering: React Router används för att hantera navigeringen mellan applikationens olika sidor.
+
+Bokningsformuläret är utformat för att guida användaren genom bokningsprocessen och förhindra ogiltiga val.
+- Användaren kan inte välja datum som har passerat, ogiltlig tid eller boka bord för 0 personer.
+- Tydliga meddelanden hjälper användaren att förstå om något behöver korrigeras.
+Dessa funktioner bidrar till en tydligare och smidigare bokningsupplevelse.
+
+Designmål
+Våra huvudsakliga designmål är att skapa ett gränssnitt som är:
+- Användarvänligt – enkelt att förstå och navigera i.
+- Konsekvent – med en enhetlig stil i hela applikationen.
+- Tydligt – med begripliga meddelanden och återkoppling.
+- Lätt att underhålla – genom en strukturerad uppdelning av CSS-stylingen.

@@ -56,7 +56,6 @@ ul {
 }
 
 
-
 :focus-visible {
   outline: 3px solid var(--button-primary);
   outline-offset: 5px;
