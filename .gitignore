@@ -25,3 +25,4 @@ dist-ssr
 ._*
 backend/assets/bookings/*.json
 backend/assets/bookings/.nfs*
+bokabord-presentation.mov

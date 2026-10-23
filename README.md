@@ -29,10 +29,37 @@ npm run dev
 
 Appen öppnas på http://localhost:5173. Anrop till `/api` skickas vidare till backend på port 5001, så båda servrarna behöver köra.
 
+## Arkitektur
+Applikationen är byggd med React, TypeScript och Vite. Koden är uppdelad efter ansvar:
+src/
+components/ återanvändbara komponenter
+pages/ sidor kopplade till routes
+hooks/ egna hooks för data och API
+services/ axios-instans och bas-URL
+utilities/ hjälpfunktioner
+types.ts gemensamma typer
+BookingContext.tsx
 
-UI/UX
+main.tsx renderar App inuti BrowserRouter och BookingProvider. I App.tsx definieras routes för /, /restaurant/:id och /dashboard, och Navbar visas på alla sidor. All backend-kommunikation går genom services/api.ts. Vite proxy:ar /api till backend på port 5001, och bas-URL:en kan ändras med VITE_API_BASE_URL.
+Backend är en Express-server som läser restauranger från restaurants.json och sparar bokningar som JSON-filer i backend/assets/bookings/.
+Hooks
+
+De egna datahooksen returnerar data, isLoading och error, och DataBoundary visar laddning, fel eller innehåll på ett enhetligt sätt.
+
+### useState
+useState används för lokalt tillstånd. BookingForm håller koll på datum, tid, antal gäster, kontaktuppgift och status. Dashboard hanterar session, bokningar och fel. SearchBar sparar sökordet, och useRead håller restauranger, laddning och fel.
+
+### useEffect
+useEffect används främst för datahämtning. I useReadRestaurants körs den en gång vid montering och hämtar restaurangerna. I Dashboard körs den när session ändras och hämtar då alla bokningar med användarens token. En cleanup-funktion med en ignore-flagga förhindrar att state uppdateras efter att komponenten avmonterats.
+
+### Egna hooks
+- useRead hämtar restauranglistan och används av Home, RestaurantDetails och SearchBar.
+- useCreateBooking och useDeleteBooking är förberedda för att skapa och ta bort bokningar.
+- useBooking och BookingProvider delar bokningsdata via context.
+
+## UI/UX
 Design och struktur
-Varje komponent har en CSS-fil och det finns en 
+Varje komponent har en CSS-fil och det finns en
 index.css för globala stilar.
 Det gör koden enklare att underhålla och gör det lättare att ändra enskilda komponenters utseende samt säkerställer en konsekvent design i hela applikationen.
 
@@ -40,31 +67,33 @@ Användarvänlighet
 Gränssnittet är utformat för att göra det enkelt för användaren att navigera i applikationen och genomföra en bokning.
 
 Vi har fokuserat på:
+
 - Igenkänning: En enhetlig design gör gränssnittet lättare att förstå och använda.
 - Tydlighet: Meddelanden hjälper användaren att förstå resultatet av sina handlingar och uppmärksammar eventuella fel.
 - Enkel navigering: React Router används för att hantera navigeringen mellan applikationens olika sidor.
 
 Bokningsformuläret är utformat för att guida användaren genom bokningsprocessen och förhindra ogiltiga val.
+
 - Användaren kan inte välja datum som har passerat, ogiltlig tid eller boka bord för 0 personer.
 - Tydliga meddelanden hjälper användaren att förstå om något behöver korrigeras.
-Dessa funktioner bidrar till en tydligare och smidigare bokningsupplevelse.
+  Dessa funktioner bidrar till en tydligare och smidigare bokningsupplevelse.
 
 Designmål
 Våra huvudsakliga designmål är att skapa ett gränssnitt som är:
+
 - Användarvänligt – enkelt att förstå och navigera i.
 - Konsekvent – med en enhetlig stil i hela applikationen.
 - Tydligt – med begripliga meddelanden och återkoppling.
 - Lätt att underhålla – genom en strukturerad uppdelning av CSS-stylingen.
 
-
 Testning
 
-I de tester vi utfört så använder vi oss av Jest. Testerna kontrollerar att datum och klockslag formateras korrekt, samt att inledande nollor läggs till när det behövs. exempelvis att dag 5 blir 05 och att klockan 09:05 inte blir 9:5. På så sätt kan vi kontrollera att funktionen ger rätt restultat för olika datum och tider. 
-
+I de tester vi utfört så använder vi oss av Jest. Testerna kontrollerar att datum och klockslag formateras korrekt, samt att inledande nollor läggs till när det behövs. exempelvis att dag 5 blir 05 och att klockan 09:05 inte blir 9:5. På så sätt kan vi kontrollera att funktionen ger rätt restultat för olika datum och tider.
 
 Validering
 
 Vi har arbetat med validering både i frontend och backend för att säkerställa att bokningarna blir korrekta. Själva bokningsformuläret begränsar användaren till förvalda datum, tider och antal personer.
+
 - Användaren kan bara välja datum som stäcker sig 14 dagar framöver.
 - Användaren kan bara välja förbestämda tider, som även ligger inom restaurangens öppetider.
 - Användaren kan bara boka för 1 till 8 personer.
